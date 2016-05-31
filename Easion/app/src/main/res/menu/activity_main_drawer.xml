@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/home"
+            android:title="Home"></item>
+        <item
+            android:id="@+id/nav_enquetes"
+            android:icon="@drawable/view_list"
+            android:title="Enquetes"></item>
+        <item
+            android:id="@+id/nav_info"
+            android:icon="@drawable/information"
+            android:title="Info"></item>
+
+
+    </group>
+
+    <item android:title="Communicatie">
+
+        <menu><item
+            android:id="@+id/nav_contact"
+            android:icon="@drawable/email"
+            android:title="Contact"></item>
+
+        </menu>
+    </item>
+
+</menu>
