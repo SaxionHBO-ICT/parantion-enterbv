@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         , new HomeFragment())
                 .commit();
 
-
     }
 
     @Override

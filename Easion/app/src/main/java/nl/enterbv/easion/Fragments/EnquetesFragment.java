@@ -7,6 +7,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,13 +35,26 @@ public class EnquetesFragment extends Fragment {
 
         tabLayout = (TabLayout) myView.findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
+//        tabLayout.getTabAt(0).setText("test");
+//        tabLayout.getTabAt(1).setText("test");
+//        tabLayout.getTabAt(2).setText("test");
 
-        tabLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                tabLayout.setupWithViewPager(viewPager);
-            }
-        });
+        Log.i("testTag",""+tabLayout.getTabAt(0).getText());
+        Log.i("testTag",""+tabLayout.getTabAt(1).getText());
+        Log.i("testTag",""+tabLayout.getTabAt(2).getText());
+        Log.i("testTag",""+tabLayout.getTabAt(3).getText());
+
+        tabLayout.setTabMode(TabLayout.MODE_FIXED);
+
+//        tabLayout.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                tabLayout.setupWithViewPager(viewPager);
+//
+//
+//
+//            }
+//        });
 
 
         return myView;
@@ -47,7 +63,6 @@ public class EnquetesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
+        //((AppCompatActivity)getActivity()).getSupportActionBar().show();
     }
 }
