@@ -36,7 +36,7 @@ public class BezigTabFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_all_tab, container, false);
+        return inflater.inflate(R.layout.fragment_busy_tab, container, false);
     }
 
 

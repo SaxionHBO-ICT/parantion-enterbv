@@ -15,8 +15,9 @@ import nl.enterbv.easion.Fragments.tabs.TodoTabFragment;
 
 public class MyFixedTabsPagerAdapter extends FragmentStatePagerAdapter {
 
-    public MyFixedTabsPagerAdapter(FragmentManager fm) {
-        super(fm);
+
+    public MyFixedTabsPagerAdapter(FragmentManager fragmentManager) {
+        super(fragmentManager);
     }
 
     /**
@@ -27,7 +28,7 @@ public class MyFixedTabsPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
 
-        switch (position){
+        switch (position) {
             case 0:
                 return new AllTabFragment();
             case 1:
@@ -48,5 +49,23 @@ public class MyFixedTabsPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getCount() {
         return 4;
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        switch (position) {
+            case 0:
+                return "Alles";
+            case 1:
+                return "Te doen";
+            case 2:
+                return "Bezig";
+            case 3:
+                return "Klaar";
+            default:
+                return "test";
+
+        }
+
     }
 }
