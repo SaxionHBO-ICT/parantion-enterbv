@@ -2,16 +2,44 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#CCFFCC"
     android:orientation="vertical">
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="home Layout"
-        android:id="@+id/textView2"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="72dp" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:background="@drawable/textbox"
+            android:orientation="vertical">
+
+
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="26sp"
+                    android:textColor="#3399FF"
+                    android:layout_marginBottom="5dp"
+                    android:textStyle="bold"
+                    android:text="Welkom "/>
+
+                <TextView
+                    android:id="@+id/home_tv_gebruiker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="gebruiker"
+                    android:textColor="#3399FF"
+                    android:gravity="center"
+                    android:layout_marginBottom="40dp"
+                    android:textSize="25sp"
+                    android:textStyle="bold"/>
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

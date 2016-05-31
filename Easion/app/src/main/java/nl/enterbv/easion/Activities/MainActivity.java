@@ -1,7 +1,6 @@
 package nl.enterbv.easion.Activities;
 
 import android.app.FragmentManager;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -12,9 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import nl.enterbv.easion.Fragments.ContactFragment;
 import nl.enterbv.easion.Fragments.EnquetesFragment;
@@ -38,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
 
-        NavigationView navigationView = (NavigationView)findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         toggle.syncState();
 
@@ -46,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         View headerView = navigationView.getHeaderView(0);
 
-       LinearLayout header = (LinearLayout)headerView.findViewById(R.id.header);
+        LinearLayout header = (LinearLayout) headerView.findViewById(R.id.header);
         header.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -54,7 +51,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 drawerLayout.closeDrawer(GravityCompat.START);
             }
         });
-
     }
 
 
@@ -63,6 +59,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onPostCreate(savedInstanceState);
 
         toggle.syncState();
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_frame
+                        , new HomeFragment())
+                .commit();
+
 
     }
 
