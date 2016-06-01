@@ -39,7 +39,6 @@ public class LoginFragment extends Fragment {
     }
 
 
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

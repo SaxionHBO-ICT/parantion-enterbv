@@ -65,10 +65,6 @@ public class TabActivity extends AppCompatActivity {
     }
 
 
-
-
-    
-
     /**
      * A placeholder fragment containing a simple view.
      */
