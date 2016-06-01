@@ -26,7 +26,11 @@
         </activity>
         <activity
             android:name=".Activities.LoginActivity"
-            android:label="@string/title_activity_login" />
+            android:label="@string/title_activity_login">
+
+
+
+        </activity>
         <activity
             android:name=".Activities.TabActivity"
             android:label="@string/title_activity_tab"
