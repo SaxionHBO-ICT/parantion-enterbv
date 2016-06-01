@@ -14,6 +14,8 @@
         android:layout_centerHorizontal="true"
         android:clickable="true"
         android:paddingTop="15dp"
+        android:scaleX="1.15"
+        android:scaleY="1.15"
         android:src="@drawable/logo_parantion_196x40_transparent" />
 
     <TextView
@@ -25,44 +27,47 @@
         android:layout_marginTop="10dp"
         android:layout_toStartOf="@+id/frag_info_icon_iv"
         android:gravity="center"
-        android:paddingEnd="10dp"
-        android:paddingStart="10dp"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
         android:text="@string/info_tab_header"
 
-        android:textSize="16sp"
+        android:textSize="18sp"
         android:textStyle="bold" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentEnd="true"
+        android:id="@+id/scrollView"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/frag_info_header">
+        android:layout_below="@+id/frag_info_header"
+        android:scrollbarAlwaysDrawVerticalTrack="true">
 
         <TextView
             android:id="@+id/frag_info_box1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:paddingEnd="10dp"
-            android:paddingStart="10dp"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp"
             android:paddingTop="10dp"
             android:text="@string/info_tab_1"
-            android:textSize="15sp" />
+            android:textSize="18sp" />
 
 
     </ScrollView>
 
     <TextView
-        android:text="Powered by Oxillion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:textStyle="italic"
-        android:textSize="9sp"
-        android:layout_marginTop="32dp"
-        android:id="@+id/textView6" />
+    android:id="@+id/textView6"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentEnd="true"
+    android:layout_marginTop="32dp"
+    android:paddingTop="10dp"
+    android:text="Powered by Oxillion"
+    android:textSize="9sp"
+    android:textStyle="italic" />
 
 
 </RelativeLayout>
