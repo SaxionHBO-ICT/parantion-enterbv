@@ -24,12 +24,15 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import nl.enterbv.easion.Fragments.LoginFragment;
 import nl.enterbv.easion.R;
 
 /**
  * A login screen that offers login via username/password.
  */
 public class LoginActivity extends AppCompatActivity {
+    private Intent intent;
+
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -38,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "1@1.com:hello", "bar@example.com:world"
+            "aart:aartwiersma", "bar@example.com:world"
     };
 
     /**
@@ -115,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
             mUsernameView.setError(getString(R.string.error_field_required));
             focusView = mUsernameView;
             cancel = true;
-        } else if (!isUsernameValid(username)) {
+        } else if (isUsernameValid(username)) {
             mUsernameView.setError(getString(R.string.error_invalid_username));
             focusView = mUsernameView;
             cancel = true;
@@ -244,13 +247,12 @@ public class LoginActivity extends AppCompatActivity {
 
             for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
+                //If username credentials match existing username
                 if (pieces[0].equals(mUsername)) {
                     // Account exists, return true if the password matches.
                     return pieces[1].equals(mPassword);
                 }
             }
-
-            // TODO: register the new account here.
             return true;
         }
 
@@ -260,7 +262,8 @@ public class LoginActivity extends AppCompatActivity {
             showProgress(false);
 
             if (success) {
-                finish();
+                intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
