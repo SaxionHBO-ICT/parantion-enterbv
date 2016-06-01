@@ -54,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 drawerLayout.closeDrawer(GravityCompat.START);
             }
         });
+
+        navigationView.getMenu().getItem(0).setChecked(true);
     }
 
 
@@ -67,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .replace(R.id.content_frame
                         , new HomeFragment())
                 .commit();
+
 
     }
 
