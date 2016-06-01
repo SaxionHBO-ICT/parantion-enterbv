@@ -53,5 +53,16 @@
 
     </ScrollView>
 
+    <TextView
+        android:text="Powered by Oxillion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:textStyle="italic"
+        android:textSize="9sp"
+        android:layout_marginTop="32dp"
+        android:id="@+id/textView6" />
+
 
 </RelativeLayout>
