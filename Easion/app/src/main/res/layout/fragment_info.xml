@@ -7,10 +7,50 @@
 
 
     <ImageView
-        android:src="@drawable/logo_parantion_196x40_transparent"
+        android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/imageView" />
+        android:paddingTop="15dp"
+        android:src="@drawable/logo_parantion_196x40_transparent" />
+
+    <TextView
+        android:id="@+id/frag_info_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/imageView"
+        android:layout_marginTop="10dp"
+        android:layout_toStartOf="@+id/imageView"
+        android:gravity="center"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
+        android:text="@string/info_tab_header"
+
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/frag_info_header">
+
+        <TextView
+            android:id="@+id/frag_info_box1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp"
+            android:paddingTop="10dp"
+            android:text="@string/info_tab_1"
+            android:textSize="15sp" />
+
+
+    </ScrollView>
+
+
 </RelativeLayout>
