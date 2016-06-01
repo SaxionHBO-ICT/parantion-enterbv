@@ -7,6 +7,9 @@ import android.os.AsyncTask;
  */
 public class ASyncLoginAuthentication extends AsyncTask<String, Void, Boolean>{
 
+
+
+
     @Override
     protected Boolean doInBackground(String... params) {
         return null;
