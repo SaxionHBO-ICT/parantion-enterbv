@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
             "foo@example.com:hello", "bar@example.com:world"
     };
     /**
-     * Keep track of the login task to ensure we can cancel it if requested.
+     * Keep trac    k of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
 
