@@ -7,11 +7,12 @@
 
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/frag_info_icon_iv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:clickable="true"
         android:paddingTop="15dp"
         android:src="@drawable/logo_parantion_196x40_transparent" />
 
@@ -20,9 +21,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/imageView"
+        android:layout_below="@+id/frag_info_icon_iv"
         android:layout_marginTop="10dp"
-        android:layout_toStartOf="@+id/imageView"
+        android:layout_toStartOf="@+id/frag_info_icon_iv"
         android:gravity="center"
         android:paddingEnd="10dp"
         android:paddingStart="10dp"
