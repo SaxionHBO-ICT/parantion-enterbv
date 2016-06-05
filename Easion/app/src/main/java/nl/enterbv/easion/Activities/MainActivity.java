@@ -195,6 +195,8 @@ class TestAsynctask extends AsyncTask<String, Void, String> {
             String response = IOUtils.toString(is, "UTF-8");
             Log.e("testTag", "response = " + response);
 
+            httpURLConnection.disconnect();
+            return response;
 
         } catch (ProtocolException e) {
             e.printStackTrace();
@@ -202,6 +204,12 @@ class TestAsynctask extends AsyncTask<String, Void, String> {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         return null;
