@@ -1,7 +1,7 @@
 package nl.enterbv.easion.Activities;
 
-import android.app.FragmentManager;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -10,16 +10,31 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.IOUtils;
+
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+
 import nl.enterbv.easion.Fragments.ContactFragment;
 import nl.enterbv.easion.Fragments.EnquetesFragment;
 import nl.enterbv.easion.Fragments.HomeFragment;
 import nl.enterbv.easion.Fragments.InfoFragment;
+import nl.enterbv.easion.Model.AppModel;
 import nl.enterbv.easion.R;
 
 
@@ -32,6 +47,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        TestAsynctask testAsynctask = new TestAsynctask();
+        testAsynctask.execute();
 
         final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -82,7 +100,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
     }
-
 
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -139,5 +156,56 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return super.onOptionsItemSelected(item);
         }
     }
+
+}
+
+class TestAsynctask extends AsyncTask<String, Void, String> {
+
+    @Override
+    protected String doInBackground(String... params) {
+        OutputStream os = null;
+        InputStream is = null;
+        HttpURLConnection httpURLConnection = null;
+
+        try {
+            String urlString = "https://easion.parantion.nl/api?Action=Authenticate";
+            String user, passwordRaw, passwordHashed;
+            user = "saxmoeuse01";
+            passwordRaw = "Welkom01";
+            passwordHashed = new String(Hex.encodeHex(DigestUtils.md5(passwordRaw)));
+
+            urlString += "&key=" + AppModel.getInstance().getAuthentication_OID();
+            urlString += "&Username=" + user;
+            urlString += "&Password=" + passwordHashed;
+
+
+            URL url = new URL(urlString);
+
+
+            httpURLConnection = (HttpURLConnection) url.openConnection();
+            httpURLConnection.setRequestMethod("POST");
+            httpURLConnection.setConnectTimeout(10000);
+            httpURLConnection.setReadTimeout(10000);
+            httpURLConnection.setDoOutput(true);
+
+
+            //int responsecode = httpURLConnection.getResponseCode();
+
+            is = new BufferedInputStream(httpURLConnection.getInputStream());
+            String response = IOUtils.toString(is, "UTF-8");
+            Log.e("testTag", "response = " + response);
+
+
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 
 }
