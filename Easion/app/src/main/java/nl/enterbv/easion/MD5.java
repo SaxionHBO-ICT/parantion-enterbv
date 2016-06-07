@@ -23,4 +23,10 @@ public class MD5 {
         return hashtext;
 
     }
+
+    public static String decodeMD5(String text) {
+
+        return "";
+
+    }
 }
