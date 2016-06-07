@@ -17,9 +17,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
@@ -52,6 +51,9 @@ import nl.enterbv.easion.R;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private ActionBarDrawerToggle toggle;
+    public static String finalUsername;
+    public static String finalPassword;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +62,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //Recieve intent
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+
+        finalUsername = intent.getStringExtra("finalUsername");
+        finalPassword = intent.getStringExtra("finalPassword");
+
         TestAsynctask testAsynctask = new TestAsynctask();
         testAsynctask.execute();
 
         final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+//        TextView textView = (TextView) findViewById(R.id.home_tv_gebruiker);
+//        TextView home_tv_gebruiker.setText();
 
         toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
@@ -75,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         View headerView = navigationView.getHeaderView(0);
+
 
         LinearLayout header = (LinearLayout) headerView.findViewById(R.id.header);
         header.setOnClickListener(new View.OnClickListener() {
@@ -172,6 +185,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 }
 
 class TestAsynctask extends AsyncTask<String, Void, String> {
+    private String finalUsername;
+    private String finalPassword;
 
     public static String getCharacterDataFromElement(Element e) {
 
@@ -263,12 +278,17 @@ class TestAsynctask extends AsyncTask<String, Void, String> {
         InputStream is = null;
         HttpURLConnection httpURLConnection = null;
 
+
         try {
             String urlString = "https://easion.parantion.nl/api?Action=Authenticate";
             String user, passwordRaw, passwordHashed;
-            user = "saxmoeuse01";
-            passwordRaw = "Welkom01";
-            passwordHashed = new String(Hex.encodeHex(DigestUtils.md5(passwordRaw)));
+
+            user = finalUsername;
+            passwordHashed = finalPassword;
+
+            //user = "saxmoeuse01";
+            //passwordRaw = "Welkom01";
+            //passwordHashed = new String(Hex.encodeHex(DigestUtils.md5(passwordRaw)));
 
             urlString += "&key=" + AppModel.getInstance().getAuthentication_OID();
             urlString += "&Username=" + user;
@@ -290,6 +310,7 @@ class TestAsynctask extends AsyncTask<String, Void, String> {
             is = new BufferedInputStream(httpURLConnection.getInputStream());
             String response = IOUtils.toString(is, "UTF-8");
             Log.e("testTag", "response = " + response);
+            is.close();
 
             httpURLConnection.disconnect();
             return response;

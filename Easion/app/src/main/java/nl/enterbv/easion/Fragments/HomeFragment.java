@@ -10,13 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
+import nl.enterbv.easion.Activities.MainActivity;
 import nl.enterbv.easion.R;
 
 /**
  * Created by user on 12/31/15.
  */
 public class HomeFragment extends Fragment{
-
     View myView;
 
     @Nullable
@@ -24,14 +26,13 @@ public class HomeFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.fragment_home, container, false);
 
-
-
         return myView;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
 
         getActivity().setTitle("Home");
     }
