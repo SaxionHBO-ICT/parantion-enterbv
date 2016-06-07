@@ -1,32 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
 
     <TextView
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Voor hulp of vragen over de App"
-        android:id="@+id/textView2"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/activity_vertical_margin" />
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="Voor hulp of vragen over de App"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
-        android:text="Mail naar: \t info@parantion.nl"
+        android:id="@+id/textView4"
         android:layout_width="match_parent"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_height="wrap_content"
-        android:id="@+id/textView4" />
+        android:layout_below="@id/textView2"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="Mail naar:"
+        android:textSize="17sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textView4"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="info@parantion.com"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <Button
-        android:text="Email"
+        android:id="@+id/bttn_email"
+        android:layout_width="270dp"
+        android:layout_height="60dp"
+        android:background="@drawable/buttonshape"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:layout_marginTop="200dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/bttn_email" />
-</LinearLayout>
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="5"
+        android:text="Email"
+        android:textColor="#FFFFFF"
+        android:textSize="30sp" />
+</RelativeLayout>
