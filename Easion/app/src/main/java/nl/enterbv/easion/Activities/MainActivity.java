@@ -206,7 +206,10 @@ class TestAsynctask extends AsyncTask<String, Void, String> {
             e.printStackTrace();
         }finally {
             try {
-                is.close();
+                if (is != null){
+                    is.close();
+
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

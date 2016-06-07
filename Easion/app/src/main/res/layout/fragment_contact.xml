@@ -9,9 +9,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="contact Layout"
+        android:text="Voor hulp of vragen over de App"
         android:id="@+id/textView2"
         android:layout_alignParentTop="true"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="72dp" />
+        android:layout_marginTop="@dimen/activity_vertical_margin" />
+
+    <TextView
+        android:text="Mail naar: \t info@parantion.nl"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView4" />
+
+    <Button
+        android:text="Email"
+        android:layout_marginTop="200dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bttn_email" />
 </LinearLayout>

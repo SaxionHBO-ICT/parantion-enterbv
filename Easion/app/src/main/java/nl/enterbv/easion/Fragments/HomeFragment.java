@@ -28,4 +28,11 @@ public class HomeFragment extends Fragment{
 
         return myView;
     }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        getActivity().setTitle("Home");
+    }
 }

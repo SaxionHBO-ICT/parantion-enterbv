@@ -38,4 +38,11 @@ public class InfoFragment extends Fragment{
 
         return myView;
     }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        getActivity().setTitle("Informatie");
+    }
 }

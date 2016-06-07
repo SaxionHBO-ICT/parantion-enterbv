@@ -65,4 +65,11 @@ public class EnquetesFragment extends Fragment {
         super.onCreate(savedInstanceState);
         //((AppCompatActivity)getActivity()).getSupportActionBar().show();
     }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        getActivity().setTitle("Enquetes");
+    }
 }
