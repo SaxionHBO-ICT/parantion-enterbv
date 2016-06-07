@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,8 +21,14 @@ import android.widget.LinearLayout;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
+import org.w3c.dom.CharacterData;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -29,6 +36,11 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import nl.enterbv.easion.Fragments.ContactFragment;
 import nl.enterbv.easion.Fragments.EnquetesFragment;
@@ -161,6 +173,90 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 class TestAsynctask extends AsyncTask<String, Void, String> {
 
+    public static String getCharacterDataFromElement(Element e) {
+
+        NodeList list = e.getChildNodes();
+        String data;
+
+        for(int index = 0; index < list.getLength(); index++){
+            if(list.item(index) instanceof CharacterData){
+                CharacterData child = (CharacterData) list.item(index);
+                data = child.getData();
+
+                if(data != null && data.trim().length() > 0)
+                    return child.getData();
+            }
+        }
+        return "";
+    }
+    @Override
+    protected void onPostExecute(String s) {
+        super.onPostExecute(s);
+        String uid_value = "";
+        String sid_value = "";
+        String oid_value = "";
+
+
+        try {
+
+            final InputStream stream = new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8));
+            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            Document doc = builder.parse(stream);
+
+            NodeList uID_nodes = doc.getElementsByTagName("Uid");
+            NodeList sID_nodes = doc.getElementsByTagName("Sid");
+            NodeList oID_nodes = doc.getElementsByTagName("Oid");
+
+            for (int i = 0; i < uID_nodes.getLength(); i++){
+                Element element = (Element)uID_nodes.item(i);
+                if (element == null){
+                    Log.e("testTag","element = null");
+                }else{
+                    Log.e("testTag","UID value  = " + getCharacterDataFromElement(element));
+                    uid_value = getCharacterDataFromElement(element);
+                }
+            }
+
+            for (int i = 0; i < sID_nodes.getLength(); i++){
+                Element element = (Element)sID_nodes.item(i);
+                if (element == null){
+                    Log.e("testTag","element = null");
+                }else{
+                    Log.e("testTag","SID value  = " + getCharacterDataFromElement(element));
+                    sid_value = getCharacterDataFromElement(element);
+
+
+                }
+            }
+
+            for (int i = 0; i < oID_nodes.getLength(); i++){
+                Element element = (Element)oID_nodes.item(i);
+                if (element == null){
+                    Log.e("testTag","element = null");
+                }else{
+                    Log.e("testTag","OID value  = " + getCharacterDataFromElement(element));
+                    oid_value = getCharacterDataFromElement(element);
+
+                }
+            }
+
+
+        } catch (SAXException e) {
+            e.printStackTrace();
+            Log.e("testTag","SAX Exception" + e.getMessage());
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+            Log.e("testTag","ParserConfigurationException" + e.getMessage());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+
+        }
+
+
+    }
+
     @Override
     protected String doInBackground(String... params) {
         OutputStream os = null;
@@ -204,9 +300,9 @@ class TestAsynctask extends AsyncTask<String, Void, String> {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             try {
-                if (is != null){
+                if (is != null) {
                     is.close();
 
                 }
