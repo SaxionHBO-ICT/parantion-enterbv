@@ -14,6 +14,7 @@ public class User {
         this.email = email;
     }
 
+
     public User(String username, String firstname, String prefix, String lastname, String email, String outstreamProfile, Date lastLoginDate, Date registrationDate) {
         this.username = username;
         this.firstname = firstname;

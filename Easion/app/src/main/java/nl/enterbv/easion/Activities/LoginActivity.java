@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,9 +23,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.sql.SQLOutput;
 import java.util.List;
 
 import nl.enterbv.easion.Fragments.LoginFragment;
+import nl.enterbv.easion.MD5;
 import nl.enterbv.easion.R;
 
 /**
@@ -33,20 +36,14 @@ import nl.enterbv.easion.R;
 public class LoginActivity extends AppCompatActivity {
     private Intent intent;
 
-
-    /**
-     * Id to identity READ_CONTACTS permission request.
-     */
-    //private static final int REQUEST_READ_CONTACTS = 0;
+    private String finalUsername;
+    private String finalPassword;
 
 
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "aart:aartwiersma", "bar@example.com:world"
-    };
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
-     */
+    **/
     private UserLoginTask mAuthTask = null;
 
     // UI references.
@@ -55,11 +52,16 @@ public class LoginActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
 
+
+    private static final String[] DUMMY_CREDENTIALS = new String[]{
+            "joepie:shandrolis", "ruben:1234"
+    };
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
 
         // Set up the login form.
         mUsernameView = (AutoCompleteTextView) findViewById(R.id.username);
@@ -71,7 +73,6 @@ public class LoginActivity extends AppCompatActivity {
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
                     attemptLogin();
-                    //intent = new Intent(this, MainActivity.class.getClass());
                     return true;
                 }
                 return false;
@@ -97,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
      * If there are form errors (invalid username, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptLogin() {
+    public void attemptLogin() {
         if (mAuthTask != null) {
             return;
         }
@@ -132,8 +133,15 @@ public class LoginActivity extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(username, password);
+            finalUsername = username;
+            finalPassword = MD5.encodeMD5(password);
+
+            Log.d("username", ""+ finalUsername);
+            Log.d("password", ""+ finalPassword);
+
+            mAuthTask = new UserLoginTask(finalUsername, finalPassword);
             mAuthTask.execute((Void) null);
+
         }
 
         // Check for a valid password, if the user entered one.
@@ -145,28 +153,29 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+
     /*
      * Give a requirement to the entered username and password
      */
+    public boolean isUsernameValid(String username) {
+        //Username cant contain "x"
+        String[] strings = {"@", "."};
+        for(int i = 0; i<strings.length; i++){
+            if(username.contains(strings[i]) == false){
 
-
-    private boolean isUsernameValid(String username) {
-        //TODO: Replace this with your own logic
+            }
+        }
         return username.contains("@");
     }
 
-    /*
-    private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
-    }
-    */
+
+
 
     /**
      * Shows the progress UI and hides the login form.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
+    public void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
@@ -199,7 +208,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    private void addUsernamesToAutoComplete(List<String> usernameAddressCollection) {
+    public void addUsernamesToAutoComplete(List<String> usernameAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(LoginActivity.this,
@@ -208,17 +217,6 @@ public class LoginActivity extends AppCompatActivity {
         mUsernameView.setAdapter(adapter);
     }
 
-/*
-    private interface ProfileQuery {
-        String[] PROJECTION = {
-                ContactsContract.CommonDataKinds.Username.ADDRESS,
-                ContactsContract.CommonDataKinds.Username.IS_PRIMARY,
-        };
-
-        int ADDRESS = 0;
-        int IS_PRIMARY = 1;
-    }
-    */
 
     /**
      * Represents an asynchronous login/registration task used to authenticate
@@ -228,6 +226,8 @@ public class LoginActivity extends AppCompatActivity {
 
         private final String mUsername;
         private final String mPassword;
+
+
 
         UserLoginTask(String username, String password) {
             mUsername = username;
@@ -248,12 +248,13 @@ public class LoginActivity extends AppCompatActivity {
             for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
                 //If username credentials match existing username
-                if (pieces[0].equals(mUsername)) {
+                if (mUsernameView.equals(mUsername)) {
                     // Account exists, return true if the password matches.
                     return pieces[1].equals(mPassword);
                 }
             }
             return true;
+
         }
 
         @Override
@@ -263,6 +264,7 @@ public class LoginActivity extends AppCompatActivity {
 
             if (success) {
                 intent = new Intent(LoginActivity.this, MainActivity.class);
+
                 startActivity(intent);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
