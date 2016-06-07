@@ -16,7 +16,7 @@ import nl.enterbv.easion.R;
  * Created by user on 12/31/15.
  */
 public class ContactFragment extends Fragment {
-    private Button emailButton;
+    private Button emailButton, websiteButton;
     View myView;
 
     @Nullable
@@ -47,6 +47,18 @@ public class ContactFragment extends Fragment {
                 startActivity(emailIntent);
             }
         });
+
+        websiteButton =(Button)myView.findViewById(R.id.bttn_website);
+        websiteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "https://www.parantion.com/";
+                Intent websiteIntent = new Intent(Intent.ACTION_VIEW);
+                websiteIntent.setData(Uri.parse(url));
+                startActivity(websiteIntent);
+            }
+        });
+
 
         return myView;
     }
