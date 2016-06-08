@@ -3,14 +3,14 @@ package nl.enterbv.easion.Activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
-
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -23,12 +23,35 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.sql.SQLOutput;
+import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.IOUtils;
+import org.w3c.dom.CharacterData;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import nl.enterbv.easion.Fragments.LoginFragment;
-import nl.enterbv.easion.MD5;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import nl.enterbv.easion.Model.AppModel;
 import nl.enterbv.easion.R;
+
+import static nl.enterbv.easion.R.id.username;
 
 /**
  * A login screen that offers login via username/password.
@@ -40,10 +63,9 @@ public class LoginActivity extends AppCompatActivity {
     private String finalPassword;
 
 
-
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
-    **/
+     **/
     private UserLoginTask mAuthTask = null;
 
     // UI references.
@@ -64,14 +86,18 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         // Set up the login form.
-        mUsernameView = (AutoCompleteTextView) findViewById(R.id.username);
+        mUsernameView = (AutoCompleteTextView) findViewById(username);
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                Log.e("testTag", "clicked SOMETTHING");
+
+                if (id == R.id.login || id == EditorInfo.IME_ACTION_GO) {
+                    Log.e("testTag", "clicked Done");
+
                     attemptLogin();
                     return true;
                 }
@@ -90,7 +116,6 @@ public class LoginActivity extends AppCompatActivity {
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
-
 
 
     /**
@@ -124,6 +149,12 @@ public class LoginActivity extends AppCompatActivity {
             focusView = mUsernameView;
             cancel = true;
         }
+        if (TextUtils.isEmpty(password)) {
+            mPasswordView.setError("This field is required");
+            focusView = mPasswordView;
+            cancel = true;
+        }
+
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
@@ -134,10 +165,11 @@ public class LoginActivity extends AppCompatActivity {
             // perform the user login attempt.
             showProgress(true);
             finalUsername = username;
-            finalPassword = MD5.encodeMD5(password);
+            //finalPassword = MD5.encodeMD5(password);
+            finalPassword = new String(Hex.encodeHex(DigestUtils.md5(password)));
 
-            Log.d("username", ""+ finalUsername);
-            Log.d("password", ""+ finalPassword);
+            Log.d("username", "" + finalUsername);
+            Log.d("password", "" + finalPassword);
 
             mAuthTask = new UserLoginTask(finalUsername, finalPassword);
             mAuthTask.execute((Void) null);
@@ -153,22 +185,19 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
     /*
      * Give a requirement to the entered username and password
      */
     public boolean isUsernameValid(String username) {
         //Username cant contain "x"
         String[] strings = {"@", "."};
-        for(int i = 0; i<strings.length; i++){
-            if(username.contains(strings[i]) == false){
+        for (int i = 0; i < strings.length; i++) {
+            if (username.contains(strings[i]) == false) {
 
             }
         }
         return username.contains("@");
     }
-
-
 
 
     /**
@@ -226,7 +255,7 @@ public class LoginActivity extends AppCompatActivity {
 
         private final String mUsername;
         private final String mPassword;
-
+        private String responseString = "";
 
 
         UserLoginTask(String username, String password) {
@@ -237,41 +266,148 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
-
+            OutputStream os = null;
+            InputStream is = null;
+            HttpURLConnection httpURLConnection = null;
+            String urlString = "https://easion.parantion.nl/api?Action=Authenticate";
             try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
+                urlString += "&key=" + AppModel.getInstance().getAuthentication_OID();
+                urlString += "&Username=" + mUsername;
+                urlString += "&Password=" + mPassword;
+
+                URL url = new URL(urlString);
+
+                httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("GET");
+                httpURLConnection.setConnectTimeout(10000);
+                httpURLConnection.setReadTimeout(10000);
+                httpURLConnection.setDoOutput(true);
+
+                is = new BufferedInputStream(httpURLConnection.getInputStream());
+                String response = IOUtils.toString(is, "UTF-8");
+                Log.e("testTag", "response = " + response);
+                is.close();
+                int responseCode = httpURLConnection.getResponseCode();
+                Log.e("testTag", " responsecode = " + responseCode);
+                httpURLConnection.disconnect();
+
+                if (response.contains("Error") || response.contains("error")) {
+                    Log.e("testTag", "response DOES contain error");
+                    return false;
+                } else {
+                    Log.e("testTag", "response does NOT contain error");
+                    responseString += response;
+                }
+
+
+                return true;
+                //Thread.sleep(2000);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                //If username credentials match existing username
-                if (mUsernameView.equals(mUsername)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
+            Log.e("testTag", "failed to authenticate");
+            return false;
+
+        }
+
+        private String getCharacterDataFromElement(Element e) {
+
+            NodeList list = e.getChildNodes();
+            String data;
+
+            for (int index = 0; index < list.getLength(); index++) {
+                if (list.item(index) instanceof CharacterData) {
+                    CharacterData child = (CharacterData) list.item(index);
+                    data = child.getData();
+
+                    if (data != null && data.trim().length() > 0)
+                        return child.getData();
                 }
             }
-            return true;
-
+            return "";
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
+            String uid_value = "";
+            String sid_value = "";
+
 
             if (success) {
+                Log.e("testTag", "Login:onpostexec: response = " + responseString);
+                try {
+
+                    final InputStream stream = new ByteArrayInputStream(responseString.getBytes(StandardCharsets.UTF_8));
+                    DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+                    Document doc = builder.parse(stream);
+
+                    NodeList uID_nodes = doc.getElementsByTagName("Uid");
+                    NodeList sID_nodes = doc.getElementsByTagName("Sid");
+
+                    for (int i = 0; i < uID_nodes.getLength(); i++) {
+                        Element element = (Element) uID_nodes.item(i);
+                        if (element == null) {
+                            Log.e("testTag", "element = null");
+                        } else {
+                            Log.e("testTag", "UID value  = " + getCharacterDataFromElement(element));
+                            uid_value = getCharacterDataFromElement(element);
+                        }
+                    }
+
+                    for (int i = 0; i < sID_nodes.getLength(); i++) {
+                        Element element = (Element) sID_nodes.item(i);
+                        if (element == null) {
+                            Log.e("testTag", "element = null");
+                        } else {
+                            Log.e("testTag", "SID value  = " + getCharacterDataFromElement(element));
+                            sid_value = getCharacterDataFromElement(element);
+
+
+                        }
+                    }
+
+
+                } catch (ParserConfigurationException e) {
+                    e.printStackTrace();
+                } catch (SAXException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+
+                }
+
+
                 intent = new Intent(LoginActivity.this, MainActivity.class);
                 intent.putExtra("finalUsername", finalUsername);
                 intent.putExtra("finalPassword", finalPassword);
                 startActivity(intent);
             } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
+
+                if (isNetworkAvailable()){
+                    mPasswordView.setError(getString(R.string.error_incorrect_password));
+                }else{
+                    mPasswordView.setError(getString(R.string.error_no_internet));
+
+                }
+
                 mPasswordView.requestFocus();
+
             }
         }
+
+        private boolean isNetworkAvailable() {
+            ConnectivityManager connectivityManager
+                    = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            return activeNetworkInfo != null && activeNetworkInfo.isConnected();        }
 
         @Override
         protected void onCancelled() {

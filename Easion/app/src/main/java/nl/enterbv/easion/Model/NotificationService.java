@@ -8,7 +8,7 @@ import android.os.IBinder;
 import android.os.PowerManager;
 
 /**
- * Created by joepv on 08.jun.2016.
+ *TODO not actually used yet.
  */
 
 public class NotificationService extends Service {

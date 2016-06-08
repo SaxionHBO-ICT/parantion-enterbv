@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -47,6 +48,7 @@ import nl.enterbv.easion.Fragments.ContactFragment;
 import nl.enterbv.easion.Fragments.EnquetesFragment;
 import nl.enterbv.easion.Fragments.HomeFragment;
 import nl.enterbv.easion.Fragments.InfoFragment;
+import nl.enterbv.easion.Fragments.SettingsFragment;
 import nl.enterbv.easion.Model.AppModel;
 import nl.enterbv.easion.R;
 
@@ -74,13 +76,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         finalUsername = intent.getStringExtra("finalUsername");
         finalPassword = intent.getStringExtra("finalPassword");
 
-        TestAsynctask testAsynctask = new TestAsynctask();
-        testAsynctask.execute();
+//        TestAsynctask testAsynctask = new TestAsynctask();
+//        testAsynctask.execute();
 
         final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-//        TextView textView = (TextView) findViewById(R.id.home_tv_gebruiker);
-//        TextView home_tv_gebruiker.setText();
 
         toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
@@ -106,8 +105,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.getMenu().getItem(0).setChecked(true);
 
 
-        TestAsynctask testTask = new TestAsynctask();
-        testTask.execute("blah","blahblah");
 
     }
 
@@ -140,6 +137,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        Log.e("testTag","id = " + item.getTitle());
+        Log.e("testTag","id = " + item.getItemId());
+
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -165,12 +165,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .replace(R.id.content_frame
                             , new ContactFragment())
                     .commit();
+        }else if (id == R.id.nav_settings){
+            Log.e("testTag","id = nav_settings");
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_frame
+                            , new SettingsFragment())
+                    .commit();
         }
 
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    /**
+     * While in MainActivity, make it so the entire application is moved to background when BackButton is pressed, rather than return to login.
+     * @param keyCode
+     * @param event
+     * @return
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        moveTaskToBack(true);
+        return super.onKeyDown(keyCode, event);
+
+
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -197,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 class TestAsynctask extends AsyncTask<String, Void, String> {
 
 
-    public static String getCharacterDataFromElement(Element e) {
+    private static String getCharacterDataFromElement(Element e) {
 
         NodeList list = e.getChildNodes();
         String data;
