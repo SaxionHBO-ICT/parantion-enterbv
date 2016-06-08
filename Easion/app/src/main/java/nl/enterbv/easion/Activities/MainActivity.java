@@ -19,6 +19,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
@@ -47,6 +49,9 @@ import nl.enterbv.easion.Fragments.HomeFragment;
 import nl.enterbv.easion.Fragments.InfoFragment;
 import nl.enterbv.easion.Model.AppModel;
 import nl.enterbv.easion.R;
+
+import static nl.enterbv.easion.Activities.MainActivity.finalPassword;
+import static nl.enterbv.easion.Activities.MainActivity.finalUsername;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -99,6 +104,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         navigationView.getMenu().getItem(0).setChecked(true);
+
+
+        TestAsynctask testTask = new TestAsynctask();
+        testTask.execute("blah","blahblah");
+
     }
 
 
@@ -185,8 +195,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 }
 
 class TestAsynctask extends AsyncTask<String, Void, String> {
-    private String finalUsername;
-    private String finalPassword;
+
 
     public static String getCharacterDataFromElement(Element e) {
 
@@ -282,13 +291,12 @@ class TestAsynctask extends AsyncTask<String, Void, String> {
         try {
             String urlString = "https://easion.parantion.nl/api?Action=Authenticate";
             String user, passwordRaw, passwordHashed;
+//            user = params[0];
+//            passwordHashed = params[1];
 
-            user = finalUsername;
-            passwordHashed = finalPassword;
-
-            //user = "saxmoeuse01";
-            //passwordRaw = "Welkom01";
-            //passwordHashed = new String(Hex.encodeHex(DigestUtils.md5(passwordRaw)));
+            user = "saxmoeuse01";
+            passwordRaw = "Welkom01";
+            passwordHashed = new String(Hex.encodeHex(DigestUtils.md5(passwordRaw)));
 
             urlString += "&key=" + AppModel.getInstance().getAuthentication_OID();
             urlString += "&Username=" + user;
@@ -299,7 +307,7 @@ class TestAsynctask extends AsyncTask<String, Void, String> {
 
 
             httpURLConnection = (HttpURLConnection) url.openConnection();
-            httpURLConnection.setRequestMethod("POST");
+            httpURLConnection.setRequestMethod("GET");
             httpURLConnection.setConnectTimeout(10000);
             httpURLConnection.setReadTimeout(10000);
             httpURLConnection.setDoOutput(true);
