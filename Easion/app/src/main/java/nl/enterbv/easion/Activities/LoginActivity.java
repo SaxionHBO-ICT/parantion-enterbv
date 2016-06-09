@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -12,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -21,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.apache.commons.codec.binary.Hex;
@@ -124,6 +127,13 @@ public class LoginActivity extends AppCompatActivity {
                 attemptLogin();
             }
         });
+
+
+
+        ProgressBar spinner = (ProgressBar) findViewById(R.id.login_progress);
+        spinner.getIndeterminateDrawable().setColorFilter(Color.parseColor("#7FC8EC"),
+                android.graphics.PorterDuff.Mode.MULTIPLY);
+
 
     }
 
@@ -236,7 +246,7 @@ public class LoginActivity extends AppCompatActivity {
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_longAnimTime);
+            int shortAnimTime = 3000;
             Log.e("testTag4","shortAnimTime ="+shortAnimTime);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
             mLoginFormView.animate().setDuration(shortAnimTime).alpha(
