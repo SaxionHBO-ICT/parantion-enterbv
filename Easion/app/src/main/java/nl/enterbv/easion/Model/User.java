@@ -1,30 +1,67 @@
 package nl.enterbv.easion.Model;
 
 import java.util.Date;
+import java.util.Observable;
+
+import nl.enterbv.easion.Fragments.HomeFragment;
 
 /**
  * Created by RubenW on 25-5-2016.
  */
-public class User {
-    private String username, firstname, prefix, lastname, email, outstreamProfile;
+public class User{
+    private String username, firstname, middlename, lastname, email, outstreamProfile, profilePhotoString;
     private Date lastLoginDate, registrationDate;
+    private int studentNummer;
 
+
+    public int getStudentNummer() {
+        return studentNummer;
+    }
+
+    public void setStudentNummer(int studentNummer) {
+        this.studentNummer = studentNummer;
+    }
 
     public void setEmail(String email) {
         this.email = email;
     }
 
 
-    public User(String username, String firstname, String prefix, String lastname, String email, String outstreamProfile, Date lastLoginDate, Date registrationDate) {
-        this.username = username;
-        this.firstname = firstname;
-        this.prefix = prefix;
-        this.lastname = lastname;
-        this.email = email;
-        this.outstreamProfile = outstreamProfile;
+    public String getProfilePhotoString() {
+        return profilePhotoString;
+    }
 
-        this.registrationDate = registrationDate;this.lastLoginDate = lastLoginDate;
-}
+    public void setProfilePhotoString(String profilePhotoString) {
+        this.profilePhotoString = profilePhotoString;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public void setMiddlename(String middlename) {
+        this.middlename = middlename;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public void setOutstreamProfile(String outstreamProfile) {
+        this.outstreamProfile = outstreamProfile;
+    }
+
+    public void setLastLoginDate(Date lastLoginDate) {
+        this.lastLoginDate = lastLoginDate;
+    }
+
+    public void setRegistrationDate(Date registrationDate) {
+        this.registrationDate = registrationDate;
+    }
 
     public String getUsername() {
         return username;
@@ -34,8 +71,8 @@ public class User {
         return firstname;
     }
 
-    public String getPrefix() {
-        return prefix;
+    public String getMiddlename() {
+        return middlename;
     }
 
     public String getLastname() {
@@ -57,4 +94,6 @@ public class User {
     public Date getRegistrationDate() {
         return registrationDate;
     }
+
+
 }

@@ -36,11 +36,13 @@
 
                 <AutoCompleteTextView
                     android:id="@+id/username"
+                    android:textCursorDrawable="@null"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_username"
                     android:imeOptions="actionNext"
                     android:nextFocusDown="@+id/password"
+                    android:textSize="18sp"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
                     android:singleLine="true" />
@@ -56,9 +58,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_password"
+                    android:textCursorDrawable="@drawable/login_cursor"
                     android:imeActionId="@+id/login"
                     android:imeActionLabel="@string/action_sign_in"
                     android:imeOptions="actionGo"
+                    android:textSize="18sp"
                     android:inputType="textPassword"
                     android:maxLines="1"
                     android:singleLine="true" />

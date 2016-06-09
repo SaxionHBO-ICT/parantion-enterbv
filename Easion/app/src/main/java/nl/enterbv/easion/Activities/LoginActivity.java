@@ -49,6 +49,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import nl.enterbv.easion.Model.AppModel;
+import nl.enterbv.easion.Model.User;
 import nl.enterbv.easion.R;
 
 import static nl.enterbv.easion.R.id.username;
@@ -58,7 +59,8 @@ import static nl.enterbv.easion.R.id.username;
  */
 public class LoginActivity extends AppCompatActivity {
     private Intent intent;
-
+    private AppModel model = AppModel.getInstance();
+    private User user = model.getCurrentUser();
     private String finalUsername;
     private String finalPassword;
 
@@ -74,10 +76,7 @@ public class LoginActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
 
-
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "joepie:shandrolis", "ruben:1234"
-    };
+    protected boolean shouldGoToNextActivity = false;
 
 
     @Override
@@ -116,7 +115,7 @@ public class LoginActivity extends AppCompatActivity {
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
-        Button devLogin = (Button)findViewById(R.id.devButton);
+        Button devLogin = (Button) findViewById(R.id.devButton);
         devLogin.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,11 +154,12 @@ public class LoginActivity extends AppCompatActivity {
             mUsernameView.setError(getString(R.string.error_field_required));
             focusView = mUsernameView;
             cancel = true;
-        } else if (isUsernameValid(username)) {
-            mUsernameView.setError(getString(R.string.error_invalid_username));
-            focusView = mUsernameView;
-            cancel = true;
         }
+//        } else if (isUsernameValid(username)) {
+//            mUsernameView.setError(getString(R.string.error_invalid_username));
+//            focusView = mUsernameView;
+//            cancel = true;
+//        }
         if (TextUtils.isEmpty(password)) {
             mPasswordView.setError("This field is required");
             focusView = mPasswordView;
@@ -188,7 +188,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password)) {
+        if (TextUtils.isEmpty(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
@@ -210,6 +210,22 @@ public class LoginActivity extends AppCompatActivity {
         return username.contains("@");
     }
 
+    public static String getCharacterDataFromElement(Element e) {
+
+        NodeList list = e.getChildNodes();
+        String data;
+
+        for (int index = 0; index < list.getLength(); index++) {
+            if (list.item(index) instanceof CharacterData) {
+                CharacterData child = (CharacterData) list.item(index);
+                data = child.getData();
+
+                if (data != null && data.trim().length() > 0)
+                    return child.getData();
+            }
+        }
+        return "";
+    }
 
     /**
      * Shows the progress UI and hides the login form.
@@ -220,8 +236,8 @@ public class LoginActivity extends AppCompatActivity {
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_longAnimTime);
+            Log.e("testTag4","shortAnimTime ="+shortAnimTime);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
             mLoginFormView.animate().setDuration(shortAnimTime).alpha(
                     show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
@@ -263,11 +279,10 @@ public class LoginActivity extends AppCompatActivity {
      * the user.
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
+        private final String[] userFields = {"firstname", "middlename", "lastname", "email", "username", "profile_photo", "studentnummer", "uitstroom"};
         private final String mUsername;
         private final String mPassword;
         private String responseString = "";
-
 
         UserLoginTask(String username, String password) {
             mUsername = username;
@@ -276,7 +291,6 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
             OutputStream os = null;
             InputStream is = null;
             HttpURLConnection httpURLConnection = null;
@@ -326,22 +340,6 @@ public class LoginActivity extends AppCompatActivity {
 
         }
 
-        private String getCharacterDataFromElement(Element e) {
-
-            NodeList list = e.getChildNodes();
-            String data;
-
-            for (int index = 0; index < list.getLength(); index++) {
-                if (list.item(index) instanceof CharacterData) {
-                    CharacterData child = (CharacterData) list.item(index);
-                    data = child.getData();
-
-                    if (data != null && data.trim().length() > 0)
-                        return child.getData();
-                }
-            }
-            return "";
-        }
 
         @Override
         protected void onPostExecute(final Boolean success) {
@@ -350,7 +348,11 @@ public class LoginActivity extends AppCompatActivity {
             String uid_value = "";
             String sid_value = "";
 
-
+            if (success) {
+                Log.e("testTag4", " succes");
+            } else {
+                Log.e("testTag4", "not succes");
+            }
             if (success) {
                 Log.e("testTag", "Login:onpostexec: response = " + responseString);
                 try {
@@ -380,32 +382,44 @@ public class LoginActivity extends AppCompatActivity {
                             Log.e("testTag", "SID value  = " + getCharacterDataFromElement(element));
                             sid_value = getCharacterDataFromElement(element);
 
-
                         }
                     }
-                    Log.e("testTag","Logged in succesfully as user '" + mUsername + "'.");
+
+                    LoadProfileTask loadProfileTask;
+                    Log.e("testTag", "Logged in succesfully as user '" + mUsername + "'.");
+
+                    model.setAuthentication_SID(sid_value);
+                    model.setAuthentication_UID(uid_value);
+
+                    for (String s : userFields) {
+                        loadProfileTask = new LoadProfileTask(s);
+                        loadProfileTask.execute();
+                    }
 
 
                 } catch (ParserConfigurationException e) {
                     e.printStackTrace();
+                    Log.e("testTag4", "parserconfig exception");
                 } catch (SAXException e) {
                     e.printStackTrace();
+                    Log.e("testTag4", "SAX  exception");
+
                 } catch (IOException e) {
                     e.printStackTrace();
-                } finally {
+                    Log.e("testTag4", "IO exception");
 
                 }
 
+//                intent = new Intent(LoginActivity.this, MainActivity.class);
+//
+//                startActivity(intent);
 
-                intent = new Intent(LoginActivity.this, MainActivity.class);
-                intent.putExtra("finalUsername", finalUsername);
-                intent.putExtra("finalPassword", finalPassword);
-                startActivity(intent);
+
             } else {
-
-                if (isNetworkAvailable()){
+                Log.e("testTag", "fail");
+                if (isNetworkAvailable()) {
                     mPasswordView.setError(getString(R.string.error_incorrect_password));
-                }else{
+                } else {
                     mPasswordView.setError(getString(R.string.error_no_internet));
 
                 }
@@ -419,7 +433,8 @@ public class LoginActivity extends AppCompatActivity {
             ConnectivityManager connectivityManager
                     = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-            return activeNetworkInfo != null && activeNetworkInfo.isConnected();        }
+            return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+        }
 
         @Override
         protected void onCancelled() {
@@ -427,5 +442,149 @@ public class LoginActivity extends AppCompatActivity {
             showProgress(false);
         }
     }
+
+
+    class LoadProfileTask extends AsyncTask<Void, Void, Boolean> {
+        //https://easion.parantion.nl/api?Action=GetUserField   &Key=fbf59197049aa6a9726228394cdca84e   &Uid=1892e6753cdced36020cb494f48b668f   &Var=profile_photo    <-- sid, uid, var
+        private String userfield;
+        private String responseString = "";
+        AppModel model = AppModel.getInstance();
+        User user = model.getCurrentUser();
+
+        public LoadProfileTask(String s) {
+            userfield = s;
+        }
+
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            OutputStream os = null;
+            InputStream is = null;
+            Log.e("testTag2", "sid =" + AppModel.getInstance().getAuthentication_SID());
+            HttpURLConnection httpURLConnection = null;
+            String urlString = "https://easion.parantion.nl/api/?Action=GetUserField";
+            urlString += "&Key=" + AppModel.getInstance().getAuthentication_SID();
+            urlString += "&Uid=" + AppModel.getInstance().getAuthentication_UID();
+            urlString += "&Var=" + userfield;
+
+            try {
+                URL url = new URL(urlString);
+
+                httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("GET");
+                httpURLConnection.setConnectTimeout(3000);
+                httpURLConnection.setReadTimeout(3000);
+                httpURLConnection.setDoOutput(true);
+
+                is = new BufferedInputStream(httpURLConnection.getInputStream());
+                String response = IOUtils.toString(is, StandardCharsets.UTF_8);
+                Log.e("testTag2", "userfield:" + userfield + " = " + response);
+
+
+                if (response.contains("Error") || response.contains("error")) {
+                    return false;
+                } else {
+                    responseString += response;
+                }
+
+                return true;
+
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            String tempString = "";
+            if (success) {
+                try {
+
+                    final InputStream stream = new ByteArrayInputStream(responseString.getBytes(StandardCharsets.UTF_8));
+
+                    DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+                    Document doc = builder.parse(stream);
+
+                    NodeList nodeList = doc.getElementsByTagName("Data");
+                    for (int i = 0; i < nodeList.getLength(); i++) {
+                        Element e = (Element) nodeList.item(i);
+                        if (e == null) {
+                            Log.e("testTag2", "getuserdata: element = null @" + userfield);
+                        } else {
+                            tempString += getCharacterDataFromElement(e);
+                            Log.e("testTag2", "getuserdata: element = " + userfield + " was succesfull");
+
+//{"firstname", "middlename", "lastname", "email", "username", "profile_photo", "studentnummer", "uitstroom"};
+
+                            switch (userfield) {
+                                case "firstname":
+                                    user.setFirstname(tempString);
+                                    break;
+                                case "middlename":
+                                    user.setMiddlename(tempString);
+                                    break;
+                                case "lastname":
+                                    user.setLastname(tempString);
+                                    break;
+                                case "email":
+                                    user.setEmail(tempString);
+                                    break;
+                                case "username":
+                                    user.setUsername(tempString);
+                                    break;
+                                case "profile_photo":
+                                    user.setProfilePhotoString(tempString);
+                                    break;
+                                case "studentnummer":
+                                    user.setStudentNummer(Integer.parseInt(tempString));
+                                    break;
+                                case "uitstroom":
+                                    user.setOutstreamProfile(tempString);
+                                    break;
+                                default:
+                                    Log.e("testTag4", " HALP");
+                                    break;
+                            }
+
+                            Log.e("testTag4", "just updated :" + tempString);
+                            if (userfield == "uitstroom") {
+                                intent = new Intent(LoginActivity.this, MainActivity.class);
+
+                                startActivity(intent);
+                                mPasswordView.setError(null);
+
+                            }
+
+                        }
+
+                    }
+
+
+                } catch (ParserConfigurationException e) {
+                    e.printStackTrace();
+                } catch (SAXException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+
+        }
+
+    }
 }
+
+
+
 

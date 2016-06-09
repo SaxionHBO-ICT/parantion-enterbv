@@ -200,18 +200,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.settings:
-                Intent i = new Intent(this, SettingsActivity.class);
-                startActivity(i);
-                return true;
 
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
 }
 
@@ -295,8 +284,6 @@ class TestAsynctask extends AsyncTask<String, Void, String> {
 
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-
         }
 
 

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import nl.enterbv.easion.Model.AppModel;
 import nl.enterbv.easion.R;
 
 /**
@@ -34,6 +35,8 @@ public class SettingsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Log.e("testTag", " onviewcreated @ settingsfragment");
         getActivity().setTitle("Profiel");
+
+        Log.e("testTag3",""+AppModel.getInstance().getCurrentUser().getMiddlename());
 
     }
 }
