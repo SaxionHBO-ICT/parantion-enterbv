@@ -115,6 +115,17 @@ public class LoginActivity extends AppCompatActivity {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        Button devLogin = (Button)findViewById(R.id.devButton);
+        devLogin.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mUsernameView.setText("joep.vander.staaij");
+                mPasswordView.setText("T8qapane");
+                attemptLogin();
+            }
+        });
+
     }
 
 
@@ -372,6 +383,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         }
                     }
+                    Log.e("testTag","Logged in succesfully as user '" + mUsername + "'.");
 
 
                 } catch (ParserConfigurationException e) {
