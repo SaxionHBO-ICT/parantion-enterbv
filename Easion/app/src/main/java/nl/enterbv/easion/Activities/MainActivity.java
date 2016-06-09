@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActionBarDrawerToggle toggle;
     public static String finalUsername;
     public static String finalPassword;
-
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         toggle.syncState();
 
@@ -103,8 +103,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         navigationView.getMenu().getItem(0).setChecked(true);
-
-
 
     }
 
@@ -139,11 +137,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {
         Log.e("testTag","id = " + item.getTitle());
         Log.e("testTag","id = " + item.getItemId());
-
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+
+        item.setCheckable(true);
+        item.setChecked(true);
 
         if (id == R.id.nav_home) {
             fragmentManager.beginTransaction()
@@ -167,10 +167,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .commit();
         }else if (id == R.id.nav_settings){
             Log.e("testTag","id = nav_settings");
+
             fragmentManager.beginTransaction()
                     .replace(R.id.content_frame
                             , new SettingsFragment())
                     .commit();
+
         }
 
 
@@ -191,18 +193,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.options_menu, menu);
-        return true;
-    }
-
-
-
 }
+
+
 
 class TestAsynctask extends AsyncTask<String, Void, String> {
 

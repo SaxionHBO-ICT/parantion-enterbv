@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group android:checkableBehavior="single" >
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/home"
@@ -16,30 +16,28 @@
             android:title="Info"></item>
 
 
+        <item android:title="Communicatie">
+            <menu>
+                <item
+                    android:id="@+id/nav_contact"
+                    android:icon="@drawable/email"
+                    android:title="Contact" />
+            </menu>
+
+
+        </item>
+
+
+        <item android:title="Instellingen">
+            <menu>
+                <item
+                    android:id="@+id/nav_settings"
+                    android:icon="@drawable/accountcarddetails"
+                    android:title="Profiel"/>
+            </menu>
+
+        </item>
+
     </group>
-
-    <item android:title="Communicatie">
-
-        <menu><item
-            android:id="@+id/nav_contact"
-            android:icon="@drawable/email"
-            android:title="Contact"></item>
-
-</menu>
-    </item>
-
-
-    <item android:title="Instellingen">
-        <menu>
-            <item
-                android:id="@+id/nav_settings"
-                android:icon="@drawable/accountcarddetails"
-                android:title="Profiel">
-
-            </item>
-
-        </menu>
-
-    </item>
 
 </menu>
