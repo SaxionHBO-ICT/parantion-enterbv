@@ -1,18 +1,37 @@
 package nl.enterbv.easion.Model;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Observable;
-
-import nl.enterbv.easion.Fragments.HomeFragment;
+import java.util.List;
 
 /**
  * Created by RubenW on 25-5-2016.
  */
-public class User{
-    private String username, firstname, middlename, lastname, email, outstreamProfile, profilePhotoString;
-    private Date lastLoginDate, registrationDate;
+public class User {
+    private String username, firstname, middlename, lastname, email, outstreamProfile, profilePhotoString, lastLoginDate;
+    private Date registrationDate;
     private int studentNummer;
+    private List<Enquete> enqueteList;
 
+    public User() {
+        enqueteList = new ArrayList<>();
+    }
+
+    public void setLastLoginDate(String lastLoginDate) {
+        this.lastLoginDate = lastLoginDate;
+    }
+
+    public String getLastLoginDate() {
+        return lastLoginDate;
+    }
+
+    public void addEnquete(Enquete e) {
+        enqueteList.add(e);
+    }
+
+    public List<Enquete> getEnqueteList() {
+        return enqueteList;
+    }
 
     public int getStudentNummer() {
         return studentNummer;
@@ -55,10 +74,6 @@ public class User{
         this.outstreamProfile = outstreamProfile;
     }
 
-    public void setLastLoginDate(Date lastLoginDate) {
-        this.lastLoginDate = lastLoginDate;
-    }
-
     public void setRegistrationDate(Date registrationDate) {
         this.registrationDate = registrationDate;
     }
@@ -87,9 +102,6 @@ public class User{
         return outstreamProfile;
     }
 
-    public Date getLastLoginDate() {
-        return lastLoginDate;
-    }
 
     public Date getRegistrationDate() {
         return registrationDate;

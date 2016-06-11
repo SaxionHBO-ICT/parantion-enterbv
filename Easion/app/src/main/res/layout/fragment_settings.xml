@@ -1,6 +1,204 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/settings_relativeLayout"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/linearlay_first"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:descendantFocusability="beforeDescendants"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="horizontal"
+        android:weightSum="5">
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_weight="2"
+            android:text="Gebruikersnaam"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_username"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:background="@drawable/textbox3"
+            android:gravity="center"
+            android:text="DefaultUsername"
+            android:textColor="#000000"
+            android:textSize="17sp" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearlay_second"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linearlay_first"
+        android:layout_marginTop="@dimen/activity_vertical_margin">
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_weight="2"
+            android:text="Voornaam"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_firstname"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:background="@drawable/textbox3"
+            android:gravity="center"
+            android:text="DefaultFirstName"
+            android:textColor="#000000"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearlay_third"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linearlay_second"
+        android:layout_marginTop="@dimen/activity_vertical_margin">
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_weight="2"
+            android:text="Tussenvoegsel"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_middlename"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:background="@drawable/textbox3"
+            android:gravity="center"
+
+            android:text="DefaultMiddleName"
+            android:textColor="#000000"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearlay_fourth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linearlay_third"
+        android:layout_marginTop="@dimen/activity_vertical_margin">
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_weight="2"
+            android:text="Achternaam"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_lastname"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:background="@drawable/textbox3"
+            android:gravity="center"
+            android:text="DefaultLastName"
+            android:textColor="#000000"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearlay_fifth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linearlay_fourth"
+        android:layout_marginTop="@dimen/activity_vertical_margin">
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_weight="2"
+            android:text="Email"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+
+        <EditText
+            android:id="@+id/et_email"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:background="@android:drawable/editbox_background"
+            android:inputType="textEmailAddress"
+            android:text="DefaultEmail"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearlay_sixth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_weight="2"
+            android:text="Laatste login : "
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_lastlogin"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:text="01-01-2000 00:00:00"
+            android:textColor="#000000"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/linearlay_fifth"
+        android:text="Opslaan"
+        android:textSize="11sp" />
+
+    <Button
+        android:id="@+id/undoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ongedaan maken"
+        android:textSize="11sp"
+        android:layout_alignBaseline="@+id/saveButton"
+        android:layout_alignBottom="@+id/saveButton"
+        android:layout_toStartOf="@+id/saveButton" />
+</RelativeLayout>

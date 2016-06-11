@@ -11,14 +11,15 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -129,7 +130,6 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-
         ProgressBar spinner = (ProgressBar) findViewById(R.id.login_progress);
         spinner.getIndeterminateDrawable().setColorFilter(Color.parseColor("#7FC8EC"),
                 android.graphics.PorterDuff.Mode.MULTIPLY);
@@ -182,6 +182,14 @@ public class LoginActivity extends AppCompatActivity {
             // form field with an error.
             focusView.requestFocus();
         } else {
+
+            //hides keyboard
+            View view = this.getCurrentFocus();
+            if (view!=null){
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(),0);
+            }
+
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
@@ -247,7 +255,7 @@ public class LoginActivity extends AppCompatActivity {
         // the progress spinner.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = 3000;
-            Log.e("testTag4","shortAnimTime ="+shortAnimTime);
+            Log.e("testTag4", "shortAnimTime =" + shortAnimTime);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
             mLoginFormView.animate().setDuration(shortAnimTime).alpha(
                     show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
@@ -289,10 +297,11 @@ public class LoginActivity extends AppCompatActivity {
      * the user.
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-        private final String[] userFields = {"firstname", "middlename", "lastname", "email", "username", "profile_photo", "studentnummer", "uitstroom"};
+        private final String[] userFields = {"firstname", "middlename", "lastname", "email", "username", "profile_photo", "studentnummer", "uitstroom", "last_login"};
         private final String mUsername;
         private final String mPassword;
         private String responseString = "";
+
 
         UserLoginTask(String username, String password) {
             mUsername = username;
@@ -350,6 +359,12 @@ public class LoginActivity extends AppCompatActivity {
 
         }
 
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Snackbar.make(mProgressView,"Logging in....",Snackbar.LENGTH_SHORT).show();
+
+        }
 
         @Override
         protected void onPostExecute(final Boolean success) {
@@ -473,8 +488,8 @@ public class LoginActivity extends AppCompatActivity {
             Log.e("testTag2", "sid =" + AppModel.getInstance().getAuthentication_SID());
             HttpURLConnection httpURLConnection = null;
             String urlString = "https://easion.parantion.nl/api/?Action=GetUserField";
-            urlString += "&Key=" + AppModel.getInstance().getAuthentication_SID();
-            urlString += "&Uid=" + AppModel.getInstance().getAuthentication_UID();
+            urlString += "&Key=" + model.getAuthentication_SID();
+            urlString += "&Uid=" + model.getAuthentication_UID();
             urlString += "&Var=" + userfield;
 
             try {
@@ -490,7 +505,8 @@ public class LoginActivity extends AppCompatActivity {
                 String response = IOUtils.toString(is, StandardCharsets.UTF_8);
                 Log.e("testTag2", "userfield:" + userfield + " = " + response);
 
-
+                is.close();
+                httpURLConnection.disconnect();
                 if (response.contains("Error") || response.contains("error")) {
                     return false;
                 } else {
@@ -506,6 +522,9 @@ public class LoginActivity extends AppCompatActivity {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
+            }finally {
+                IOUtils.closeQuietly(is);
+                httpURLConnection.disconnect();
             }
 
 
@@ -530,7 +549,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.e("testTag2", "getuserdata: element = null @" + userfield);
                         } else {
                             tempString += getCharacterDataFromElement(e);
-                            Log.e("testTag2", "getuserdata: element = " + userfield + " was succesfull");
+                            Log.e("testTag2", "getuserdata: element = " + userfield + " was succesfull : " + tempString);
 
 //{"firstname", "middlename", "lastname", "email", "username", "profile_photo", "studentnummer", "uitstroom"};
 
@@ -554,13 +573,18 @@ public class LoginActivity extends AppCompatActivity {
                                     user.setProfilePhotoString(tempString);
                                     break;
                                 case "studentnummer":
+                                    if (!tempString.isEmpty())
                                     user.setStudentNummer(Integer.parseInt(tempString));
                                     break;
                                 case "uitstroom":
                                     user.setOutstreamProfile(tempString);
                                     break;
+                                case "last_login":
+                                    user.setLastLoginDate(tempString);
+                                    break;
                                 default:
                                     Log.e("testTag4", " HALP");
+                                    Log.e("testTag4", " considering " + userfield + " = " + tempString);
                                     break;
                             }
 
@@ -569,6 +593,7 @@ public class LoginActivity extends AppCompatActivity {
                                 intent = new Intent(LoginActivity.this, MainActivity.class);
 
                                 startActivity(intent);
+                                finish();
                                 mPasswordView.setError(null);
 
                             }

@@ -6,19 +6,15 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -52,9 +48,6 @@ import nl.enterbv.easion.Fragments.SettingsFragment;
 import nl.enterbv.easion.Model.AppModel;
 import nl.enterbv.easion.R;
 
-import static nl.enterbv.easion.Activities.MainActivity.finalPassword;
-import static nl.enterbv.easion.Activities.MainActivity.finalUsername;
-
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private ActionBarDrawerToggle toggle;
@@ -84,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
 
-         navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         toggle.syncState();
 
@@ -127,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            moveTaskToBack(true);
         }
     }
 
@@ -135,8 +128,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        Log.e("testTag","id = " + item.getTitle());
-        Log.e("testTag","id = " + item.getItemId());
+        Log.e("testTag", "id = " + item.getTitle());
+        Log.e("testTag", "id = " + item.getItemId());
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -165,8 +158,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .replace(R.id.content_frame
                             , new ContactFragment())
                     .commit();
-        }else if (id == R.id.nav_settings){
-            Log.e("testTag","id = nav_settings");
+        } else if (id == R.id.nav_settings) {
+            Log.e("testTag", "id = nav_settings");
 
             fragmentManager.beginTransaction()
                     .replace(R.id.content_frame
@@ -180,21 +173,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+
     /**
      * While in MainActivity, make it so the entire application is moved to background when BackButton is pressed, rather than return to login.
+     *
      * @param keyCode
      * @param event
      * @return
      */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        moveTaskToBack(true);
+        //moveTaskToBack(true);
+//        if (keyCode == KeyEvent.KEYCODE_BACK) ;
+//        {
+//            moveTaskToBack(true);
+//        }
+
         return super.onKeyDown(keyCode, event);
-
-
     }
-}
 
+}
 
 
 class TestAsynctask extends AsyncTask<String, Void, String> {
@@ -205,17 +203,18 @@ class TestAsynctask extends AsyncTask<String, Void, String> {
         NodeList list = e.getChildNodes();
         String data;
 
-        for(int index = 0; index < list.getLength(); index++){
-            if(list.item(index) instanceof CharacterData){
+        for (int index = 0; index < list.getLength(); index++) {
+            if (list.item(index) instanceof CharacterData) {
                 CharacterData child = (CharacterData) list.item(index);
                 data = child.getData();
 
-                if(data != null && data.trim().length() > 0)
+                if (data != null && data.trim().length() > 0)
                     return child.getData();
             }
         }
         return "";
     }
+
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
@@ -234,34 +233,34 @@ class TestAsynctask extends AsyncTask<String, Void, String> {
             NodeList sID_nodes = doc.getElementsByTagName("Sid");
             NodeList oID_nodes = doc.getElementsByTagName("Oid");
 
-            for (int i = 0; i < uID_nodes.getLength(); i++){
-                Element element = (Element)uID_nodes.item(i);
-                if (element == null){
-                    Log.e("testTag","element = null");
-                }else{
-                    Log.e("testTag","UID value  = " + getCharacterDataFromElement(element));
+            for (int i = 0; i < uID_nodes.getLength(); i++) {
+                Element element = (Element) uID_nodes.item(i);
+                if (element == null) {
+                    Log.e("testTag", "element = null");
+                } else {
+                    Log.e("testTag", "UID value  = " + getCharacterDataFromElement(element));
                     uid_value = getCharacterDataFromElement(element);
                 }
             }
 
-            for (int i = 0; i < sID_nodes.getLength(); i++){
-                Element element = (Element)sID_nodes.item(i);
-                if (element == null){
-                    Log.e("testTag","element = null");
-                }else{
-                    Log.e("testTag","SID value  = " + getCharacterDataFromElement(element));
+            for (int i = 0; i < sID_nodes.getLength(); i++) {
+                Element element = (Element) sID_nodes.item(i);
+                if (element == null) {
+                    Log.e("testTag", "element = null");
+                } else {
+                    Log.e("testTag", "SID value  = " + getCharacterDataFromElement(element));
                     sid_value = getCharacterDataFromElement(element);
 
 
                 }
             }
 
-            for (int i = 0; i < oID_nodes.getLength(); i++){
-                Element element = (Element)oID_nodes.item(i);
-                if (element == null){
-                    Log.e("testTag","element = null");
-                }else{
-                    Log.e("testTag","OID value  = " + getCharacterDataFromElement(element));
+            for (int i = 0; i < oID_nodes.getLength(); i++) {
+                Element element = (Element) oID_nodes.item(i);
+                if (element == null) {
+                    Log.e("testTag", "element = null");
+                } else {
+                    Log.e("testTag", "OID value  = " + getCharacterDataFromElement(element));
                     oid_value = getCharacterDataFromElement(element);
 
                 }
@@ -270,10 +269,10 @@ class TestAsynctask extends AsyncTask<String, Void, String> {
 
         } catch (SAXException e) {
             e.printStackTrace();
-            Log.e("testTag","SAX Exception" + e.getMessage());
+            Log.e("testTag", "SAX Exception" + e.getMessage());
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
-            Log.e("testTag","ParserConfigurationException" + e.getMessage());
+            Log.e("testTag", "ParserConfigurationException" + e.getMessage());
 
         } catch (IOException e) {
             e.printStackTrace();
