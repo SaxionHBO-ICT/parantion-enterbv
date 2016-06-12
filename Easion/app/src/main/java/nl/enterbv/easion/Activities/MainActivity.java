@@ -69,9 +69,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         finalUsername = intent.getStringExtra("finalUsername");
         finalPassword = intent.getStringExtra("finalPassword");
 
-//        TestAsynctask testAsynctask = new TestAsynctask();
-//        testAsynctask.execute();
-
         final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -96,7 +93,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         navigationView.getMenu().getItem(0).setChecked(true);
-
     }
 
 

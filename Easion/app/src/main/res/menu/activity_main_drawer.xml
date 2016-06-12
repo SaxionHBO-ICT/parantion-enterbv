@@ -38,6 +38,17 @@
 
         </item>
 
+        <item android:title="Uitloggen">
+            <menu>
+                <item
+                    android:id="@+id/nav_logout"
+                    android:icon="@drawable/logout"
+                    android:title="Uitloggen"
+                    >
+                </item>
+            </menu>
+        </item>
+
     </group>
 
 </menu>
