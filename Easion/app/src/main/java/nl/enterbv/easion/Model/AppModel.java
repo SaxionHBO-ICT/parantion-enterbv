@@ -8,7 +8,9 @@ public class AppModel {
     private final String authentication_OID = "567dc9e3649c476a9e52bc8bf1ca30ea";
     private String authentication_SID;
     private String authentication_UID;
-    private static AppModel ourInstance = new AppModel();
+
+    // is 'volatile' to ensure all threads access the same instance
+    private static volatile AppModel ourInstance = new AppModel();
 
     public static AppModel getInstance() {
         return ourInstance;
