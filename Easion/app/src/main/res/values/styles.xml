@@ -7,13 +7,18 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:activatedBackgroundIndicator">@drawable/highlight_color_activated</item>
         <item name="android:actionBarItemBackground">@color/itemSelected</item>
+        <item name="android:alertDialogTheme">@style/StyledDialog</item>
      <!--   <item name="windowActionBar">false</item> -->
     <!--    <item name="windowNoTitle">true</item> -->
         <item name="colorAccent">@color/accent_material_light</item>
 
     </style>
 
-
+    <style name="StyledDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/accent_material_light</item>
+    </style>
 
 
     <style name="FullscreenTheme" parent="AppTheme">

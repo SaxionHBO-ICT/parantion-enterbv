@@ -1,45 +1,21 @@
 package nl.enterbv.easion.Activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
-
-import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.io.IOUtils;
-import org.w3c.dom.CharacterData;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import nl.enterbv.easion.Fragments.ContactFragment;
 import nl.enterbv.easion.Fragments.EnquetesFragment;
@@ -99,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     /**
      * Makes sure the navigationdrawer functions properly by synchronizing the layout with its drawer.
+     *
      * @param savedInstanceState
      */
     @Override
@@ -120,18 +97,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * Logs the user out
      */
     public void logOut() {
-        Snackbar.make(navigationView,"Logging out....",Snackbar.LENGTH_SHORT).show();
+        logOutDialog();
 
-        Intent i = new Intent(this, LoginActivity.class);
-        startActivity(i);
-        AppModel.logout();
-        finish();
+    }
+
+    private void logOutDialog() {
+
+        new AlertDialog.Builder(MainActivity.this, R.style.StyledDialog)
+                .setTitle("Uitloggen")
+                .setMessage("Weet je zeker dat je wilt uitloggen?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.e("testTag", "user wished to log out.");
+
+                        Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                        startActivity(i);
+                        AppModel.logout();
+                        finish();
+
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.e("testTag", "user did not wish to log out.");
+
+                    }
+                })
+                .setIcon(R.drawable.alert)
+                .show();
 
     }
 
     /**
      * Handles on-click-events in the navigation-drawer-menu.
-     * @param item  The item that was clicked
+     *
+     * @param item The item that was clicked
      * @return
      */
     @SuppressWarnings("StatementWithEmptyBody")
@@ -186,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     /**
-     *  Prevents user from going to the login activity when back button is pressed.
+     * Prevents user from going to the login activity when back button is pressed.
      */
     @Override
     public void onBackPressed() {
@@ -194,7 +196,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            moveTaskToBack(true);
+            Fragment f = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+
+            if (f instanceof HomeFragment) {
+                Log.e("testTag", "was home fragment");
+                logOut();
+
+            }else{
+                navigationView.getMenu().getItem(0).setChecked(true);
+
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_frame, new HomeFragment())
+                        .commit();
+            }
+
+
+            // moveTaskToBack(true);
         }
     }
 
