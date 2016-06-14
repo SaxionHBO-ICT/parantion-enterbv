@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -96,6 +97,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    /**
+     * Makes sure the navigationdrawer functions properly by synchronizing the layout with its drawer.
+     * @param savedInstanceState
+     */
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -110,17 +115,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            moveTaskToBack(true);
-        }
+
+    /**
+     * Logs the user out
+     */
+    public void logOut() {
+        Snackbar.make(navigationView,"Logging out....",Snackbar.LENGTH_SHORT).show();
+
+        Intent i = new Intent(this, LoginActivity.class);
+        startActivity(i);
+        AppModel.logout();
+        finish();
+
     }
 
-
+    /**
+     * Handles on-click-events in the navigation-drawer-menu.
+     * @param item  The item that was clicked
+     * @return
+     */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -161,7 +174,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .replace(R.id.content_frame
                             , new SettingsFragment())
                     .commit();
+        } else if (id == R.id.nav_logout) {
 
+            logOut();
         }
 
 
@@ -171,173 +186,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     /**
-     * While in MainActivity, make it so the entire application is moved to background when BackButton is pressed, rather than return to login.
-     *
-     * @param keyCode
-     * @param event
-     * @return
+     *  Prevents user from going to the login activity when back button is pressed.
      */
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        //moveTaskToBack(true);
-//        if (keyCode == KeyEvent.KEYCODE_BACK) ;
-//        {
-//            moveTaskToBack(true);
-//        }
-
-        return super.onKeyDown(keyCode, event);
-    }
-
-}
-
-
-class TestAsynctask extends AsyncTask<String, Void, String> {
-
-
-    private static String getCharacterDataFromElement(Element e) {
-
-        NodeList list = e.getChildNodes();
-        String data;
-
-        for (int index = 0; index < list.getLength(); index++) {
-            if (list.item(index) instanceof CharacterData) {
-                CharacterData child = (CharacterData) list.item(index);
-                data = child.getData();
-
-                if (data != null && data.trim().length() > 0)
-                    return child.getData();
-            }
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            moveTaskToBack(true);
         }
-        return "";
     }
-
-    @Override
-    protected void onPostExecute(String s) {
-        super.onPostExecute(s);
-        String uid_value = "";
-        String sid_value = "";
-        String oid_value = "";
-
-
-        try {
-
-            final InputStream stream = new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8));
-            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            Document doc = builder.parse(stream);
-
-            NodeList uID_nodes = doc.getElementsByTagName("Uid");
-            NodeList sID_nodes = doc.getElementsByTagName("Sid");
-            NodeList oID_nodes = doc.getElementsByTagName("Oid");
-
-            for (int i = 0; i < uID_nodes.getLength(); i++) {
-                Element element = (Element) uID_nodes.item(i);
-                if (element == null) {
-                    Log.e("testTag", "element = null");
-                } else {
-                    Log.e("testTag", "UID value  = " + getCharacterDataFromElement(element));
-                    uid_value = getCharacterDataFromElement(element);
-                }
-            }
-
-            for (int i = 0; i < sID_nodes.getLength(); i++) {
-                Element element = (Element) sID_nodes.item(i);
-                if (element == null) {
-                    Log.e("testTag", "element = null");
-                } else {
-                    Log.e("testTag", "SID value  = " + getCharacterDataFromElement(element));
-                    sid_value = getCharacterDataFromElement(element);
-
-
-                }
-            }
-
-            for (int i = 0; i < oID_nodes.getLength(); i++) {
-                Element element = (Element) oID_nodes.item(i);
-                if (element == null) {
-                    Log.e("testTag", "element = null");
-                } else {
-                    Log.e("testTag", "OID value  = " + getCharacterDataFromElement(element));
-                    oid_value = getCharacterDataFromElement(element);
-
-                }
-            }
-
-
-        } catch (SAXException e) {
-            e.printStackTrace();
-            Log.e("testTag", "SAX Exception" + e.getMessage());
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-            Log.e("testTag", "ParserConfigurationException" + e.getMessage());
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-    }
-
-    @Override
-    protected String doInBackground(String... params) {
-        OutputStream os = null;
-        InputStream is = null;
-        HttpURLConnection httpURLConnection = null;
-
-
-        try {
-            String urlString = "https://easion.parantion.nl/api?Action=Authenticate";
-            String user, passwordRaw, passwordHashed;
-//            user = params[0];
-//            passwordHashed = params[1];
-
-            user = "saxmoeuse01";
-            passwordRaw = "Welkom01";
-            passwordHashed = new String(Hex.encodeHex(DigestUtils.md5(passwordRaw)));
-
-            urlString += "&key=" + AppModel.getInstance().getAuthentication_OID();
-            urlString += "&Username=" + user;
-            urlString += "&Password=" + passwordHashed;
-
-
-            URL url = new URL(urlString);
-
-
-            httpURLConnection = (HttpURLConnection) url.openConnection();
-            httpURLConnection.setRequestMethod("GET");
-            httpURLConnection.setConnectTimeout(10000);
-            httpURLConnection.setReadTimeout(10000);
-            httpURLConnection.setDoOutput(true);
-
-
-            //int responsecode = httpURLConnection.getResponseCode();
-
-            is = new BufferedInputStream(httpURLConnection.getInputStream());
-            String response = IOUtils.toString(is, "UTF-8");
-            Log.e("testTag", "response = " + response);
-            is.close();
-
-            httpURLConnection.disconnect();
-            return response;
-
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (is != null) {
-                    is.close();
-
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return null;
-    }
-
 
 }

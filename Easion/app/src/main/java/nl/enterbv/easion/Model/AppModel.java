@@ -21,6 +21,10 @@ public class AppModel {
     public  User getCurrentUser() {
         return currentUser;
     }
+    public static void logout(){
+        ourInstance= new AppModel();
+
+    }
 
 
     public String getAuthentication_OID() {
