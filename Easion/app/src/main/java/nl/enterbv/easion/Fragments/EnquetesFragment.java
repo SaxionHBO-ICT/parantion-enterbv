@@ -1,21 +1,45 @@
 package nl.enterbv.easion.Fragments;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import org.apache.commons.io.IOUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import nl.enterbv.easion.Activities.LoginActivity;
+import nl.enterbv.easion.Activities.MainActivity;
 import nl.enterbv.easion.Controller.OnSwipeTouchListener;
 import nl.enterbv.easion.Model.AppModel;
 import nl.enterbv.easion.Model.Enquete;
@@ -156,25 +180,51 @@ public class EnquetesFragment extends Fragment {
         taskCounter = (TextView) mView.findViewById(R.id.tv_enquetes_count);
         switch (tabLayout.getSelectedTabPosition()) {
             case 0:
-                taskCounter.setText(""+enqList.size());
+                taskCounter.setText("" + enqList.size());
                 break;
             case 1:
-                taskCounter.setText(""+enqList.size());
+                taskCounter.setText("" + enqList.size());
                 break;
             case 2:
-                taskCounter.setText(""+enqList.size());
+                taskCounter.setText("" + enqList.size());
                 break;
             case 3:
-                taskCounter.setText(""+enqList.size());
+                taskCounter.setText("" + enqList.size());
                 break;
         }
 
+        setHasOptionsMenu(true);
         return mView;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.options_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.refresh:
+                refreshData();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+    private void refreshData() {
+
+        TaskRetreiver taskRetreiver = new TaskRetreiver();
+        taskRetreiver.execute();
+    }
+
+
     private void changeTab(int pos) {
         enqList.clear();
-        Toast.makeText(getContext(), "tab gewisseld :D", Toast.LENGTH_SHORT).show();
         switch (pos) {
             case 0:
                 enqList.addAll(user.getEnqueteList());
@@ -205,16 +255,16 @@ public class EnquetesFragment extends Fragment {
         taskListAdapter.notifyDataSetChanged();
         switch (tabLayout.getSelectedTabPosition()) {
             case 0:
-                taskCounter.setText(""+enqList.size());
+                taskCounter.setText("" + enqList.size());
                 break;
             case 1:
-                taskCounter.setText(""+enqList.size());
+                taskCounter.setText("" + enqList.size());
                 break;
             case 2:
-                taskCounter.setText(""+enqList.size());
+                taskCounter.setText("" + enqList.size());
                 break;
             case 3:
-                taskCounter.setText(""+enqList.size());
+                taskCounter.setText("" + enqList.size());
                 break;
         }
         mView.invalidate();
@@ -232,5 +282,131 @@ public class EnquetesFragment extends Fragment {
 
     }
 
+
+
+
+    class TaskRetreiver extends AsyncTask<Void, Void, Boolean> {
+        private String responseString = "";
+        AppModel model = AppModel.getInstance();
+        User user = model.getCurrentUser();
+
+        public TaskRetreiver() {
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            OutputStream os = null;
+            InputStream is = null;
+            HttpURLConnection httpURLConnection = null;
+
+            String urlString = "https://easion.parantion.nl/api?Action=GetTasks";
+            urlString += "&Key=" + model.getAuthentication_SID();
+            urlString += "&Uid=" + model.getAuthentication_UID();
+            Log.e("testTag10", "url = " + urlString);
+
+            try {
+                URL url = new URL(urlString);
+
+                httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("GET");
+                httpURLConnection.setConnectTimeout(3000);
+                httpURLConnection.setReadTimeout(3000);
+                httpURLConnection.setDoOutput(true);
+
+                is = new BufferedInputStream(httpURLConnection.getInputStream());
+
+                String response = IOUtils.toString(is, StandardCharsets.UTF_8);
+
+                if (response.contains("Error") || response.contains("error")) {
+                    return false;
+                } else {
+                    responseString += response;
+                }
+                return true;
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                IOUtils.closeQuietly(is);
+                httpURLConnection.disconnect();
+            }
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            String tempString = "";
+            if (success) {
+                try {
+                    final InputStream stream = new ByteArrayInputStream(responseString.getBytes(StandardCharsets.UTF_8));
+                    DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+                    Document doc = builder.parse(stream);
+
+                    NodeList nodeList = doc.getElementsByTagName("Tasks");
+                    for (int i = 0; i < nodeList.getLength(); i++) {
+                        Element element = (Element) nodeList.item(i);
+                        if (element == null) {
+                        } else {
+                            NodeList tasksList = element.getChildNodes();
+
+                            for (int z = 0; z < tasksList.getLength(); z++) {
+                                Element e = (Element) tasksList.item(z);
+
+                                NodeList taskNL = e.getChildNodes();
+                                final String[] tempArray = {"Id", "Date", "Sender", "Label", "Message", "Progress", "Link", "Fid"};
+
+                                Enquete tempEnquete = new Enquete();
+
+                                for (int q = 0; q < taskNL.getLength(); q++) {
+                                    Element el = (Element) taskNL.item(q);
+                                    String res = LoginActivity.getCharacterDataFromElement(el);
+                                    switch (el.getNodeName()) {
+                                        case "Id":
+                                            tempEnquete.setUnique_ID(Integer.parseInt(res));
+                                            break;
+                                        case "Date":
+                                            tempEnquete.setCreationDate(res);
+                                            break;
+                                        case "Sender":
+                                            tempEnquete.setSender(res);
+                                            break;
+                                        case "Label":
+                                            tempEnquete.setLabel(res);
+                                            break;
+                                        case "Message":
+                                            tempEnquete.setMessage(res);
+                                            break;
+                                        case "Progress":
+                                            tempEnquete.setProgress(Integer.parseInt(res));
+                                            break;
+                                        case "Link":
+                                            tempEnquete.setLink(res);
+                                            break;
+                                        case "Fid":
+                                            tempEnquete.setFid(res);
+                                            break;
+                                    }
+                                }
+                                user.addEnquete(tempEnquete);
+
+
+                            }
+                        }
+                    }
+                } catch (SAXException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ParserConfigurationException e) {
+                    e.printStackTrace();
+                }
+            }
+            taskListAdapter.notifyDataSetChanged();
+
+        }
+    }
 
 }

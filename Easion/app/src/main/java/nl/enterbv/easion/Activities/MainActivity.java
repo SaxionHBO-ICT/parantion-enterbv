@@ -247,7 +247,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    class RetreiveTasks extends AsyncTask<Void, Void, Boolean> {
+   class RetreiveTasks extends AsyncTask<Void, Void, Boolean> {
         private String responseString = "";
         AppModel model = AppModel.getInstance();
         User user = model.getCurrentUser();
@@ -354,25 +354,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 }
                                 user.addEnquete(tempEnquete);
 
-//                                FragmentManager fm = getSupportFragmentManager();
-//
-//                                if (fm.findFragmentById(R.id.content_frame) instanceof EnquetesFragment){
-//                                    Log.e("testTag1337","ya1");
-//                                    EnquetesFragment enq;
-//                                    enq = (EnquetesFragment) fm.findFragmentById(R.id.content_frame);
-//
-//                                    FragmentManager subfm = enq.getChildFragmentManager();
-//
-//                                    Fragment frag =(Fragment)enq.getViewPager().getAdapter().instantiateItem(enq.getViewPager(),enq.getViewPager().getCurrentItem());
-//                                    if (frag instanceof AllTabFragment){
-//                                        Log.e("testTag1337","ya2");
-//                                    }else{
-//                                        Log.e("testTag1337","na2");
-//                                    }
-//
-//                                }else {
-//                                    Log.e("testTag1337","nah1");
-//                                }
 
                             }
                         }
@@ -385,8 +366,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     e.printStackTrace();
                 }
             }
-
-
         }
     }
 
