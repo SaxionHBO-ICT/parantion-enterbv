@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -132,6 +133,18 @@ public class LoginActivity extends AppCompatActivity {
         spinner.getIndeterminateDrawable().setColorFilter(Color.parseColor("#7FC8EC"),
                 android.graphics.PorterDuff.Mode.MULTIPLY);
 
+        Button lostPassword = (Button) findViewById(R.id.bttn_lostpassword);
+
+        lostPassword.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = "https://scorion3.parantion.nl/mailpassword/";
+                Intent websiteIntent = new Intent(Intent.ACTION_VIEW);
+                websiteIntent.setData(Uri.parse(url));
+                startActivity(websiteIntent);
+            }
+        });
+
 
     }
 
@@ -183,9 +196,9 @@ public class LoginActivity extends AppCompatActivity {
 
             //hides keyboard
             View view = this.getCurrentFocus();
-            if (view!=null){
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(view.getWindowToken(),0);
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
 
             // Show a progress spinner, and kick off a background task to
@@ -360,7 +373,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Snackbar.make(mProgressView,"Logging in....",Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(mProgressView, "Logging in....", Snackbar.LENGTH_SHORT).show();
 
         }
 
@@ -520,7 +533,7 @@ public class LoginActivity extends AppCompatActivity {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
-            }finally {
+            } finally {
                 IOUtils.closeQuietly(is);
                 httpURLConnection.disconnect();
             }
@@ -572,7 +585,7 @@ public class LoginActivity extends AppCompatActivity {
                                     break;
                                 case "studentnummer":
                                     if (!tempString.isEmpty())
-                                    user.setStudentNummer(Integer.parseInt(tempString));
+                                        user.setStudentNummer(Integer.parseInt(tempString));
                                     break;
                                 case "uitstroom":
                                     user.setOutstreamProfile(tempString);

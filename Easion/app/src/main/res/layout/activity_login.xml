@@ -85,6 +85,12 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/devButton" />
 
+            <Button
+                android:layout_width="match_parent"
+                android:layout_marginTop="30dp"
+                android:layout_height="wrap_content"
+                android:text="Wachtwoord Vergeten"
+                android:id="@+id/bttn_lostpassword"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
