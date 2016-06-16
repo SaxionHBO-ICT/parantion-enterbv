@@ -6,15 +6,28 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import nl.enterbv.easion.Model.AppModel;
+import nl.enterbv.easion.Model.Enquete;
+import nl.enterbv.easion.Model.TaskListAdapter;
+import nl.enterbv.easion.Model.User;
 import nl.enterbv.easion.R;
 
 
 public class TodoTabFragment extends Fragment {
+    View mView;
+    ListView toDoTabListView;
+    User user = AppModel.getInstance().getCurrentUser();
+    TaskListAdapter adapter;
 
     public TodoTabFragment() {
         // Required empty public constructor
     }
+
 
     public static TodoTabFragment newInstance(String param1, String param2) {
         TodoTabFragment fragment = new TodoTabFragment();
@@ -35,8 +48,22 @@ public class TodoTabFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_todo_tab, container, false);
+        mView = inflater.inflate(R.layout.fragment_todo_tab, container, false);
+        List<Enquete> toDoList = new ArrayList();
+        for (Enquete e : user.getEnqueteList()) {
+
+            if (e.getProgress() == 0) {
+                toDoList.add(e);
+            }
+        }
+
+        adapter = new TaskListAdapter(getContext(), toDoList);
+
+        toDoTabListView = (ListView) mView.findViewById(R.id.lv_todotab);
+        toDoTabListView.setAdapter(adapter);
+
+
+        return mView;
     }
 
 

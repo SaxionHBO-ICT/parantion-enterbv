@@ -6,15 +6,28 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import nl.enterbv.easion.Model.AppModel;
+import nl.enterbv.easion.Model.Enquete;
+import nl.enterbv.easion.Model.TaskListAdapter;
+import nl.enterbv.easion.Model.User;
 import nl.enterbv.easion.R;
 
 
 public class KlaarTabFragment extends Fragment {
+    View mView;
+    ListView doneTabListView;
+    User user = AppModel.getInstance().getCurrentUser();
+    TaskListAdapter adapter;
 
     public KlaarTabFragment() {
         // Required empty public constructor
     }
+
 
     public static KlaarTabFragment newInstance(String param1, String param2) {
         KlaarTabFragment fragment = new KlaarTabFragment();
@@ -35,8 +48,22 @@ public class KlaarTabFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_done_tab, container, false);
+         mView = inflater.inflate(R.layout.fragment_done_tab, container, false);
+        List<Enquete> doneList = new ArrayList();
+        for (Enquete e : user.getEnqueteList()) {
+
+            if (e.getProgress() == 2) {
+                doneList.add(e);
+            }
+        }
+
+        adapter = new TaskListAdapter(getContext(), doneList);
+
+        doneTabListView = (ListView) mView.findViewById(R.id.lv_donetab);
+        doneTabListView.setAdapter(adapter);
+
+
+        return mView;
     }
 
 

@@ -4,10 +4,10 @@
     android:layout_height="match_parent"
     tools:context="nl.enterbv.easion.Fragments.tabs.AllTabFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <ListView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Klaar fragment" />
+        android:id="@+id/lv_donetab"
+        android:layout_height="match_parent" />
 
 </FrameLayout>

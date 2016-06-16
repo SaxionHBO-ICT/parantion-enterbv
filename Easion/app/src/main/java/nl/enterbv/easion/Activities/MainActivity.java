@@ -2,10 +2,12 @@ package nl.enterbv.easion.Activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -17,12 +19,35 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import org.apache.commons.io.IOUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import nl.enterbv.easion.Fragments.ContactFragment;
 import nl.enterbv.easion.Fragments.EnquetesFragment;
 import nl.enterbv.easion.Fragments.HomeFragment;
 import nl.enterbv.easion.Fragments.InfoFragment;
 import nl.enterbv.easion.Fragments.SettingsFragment;
+import nl.enterbv.easion.Fragments.tabs.AllTabFragment;
 import nl.enterbv.easion.Model.AppModel;
+import nl.enterbv.easion.Model.Enquete;
+import nl.enterbv.easion.Model.User;
 import nl.enterbv.easion.R;
 
 
@@ -88,6 +113,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .replace(R.id.content_frame
                         , new HomeFragment())
                 .commit();
+
+        updateTasks();
 
 
     }
@@ -202,12 +229,161 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Log.e("testTag", "was home fragment");
                 logOut();
 
-            }else{
+            } else {
                 navigationView.getMenu().getItem(0).setChecked(true);
 
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content_frame, new HomeFragment())
                         .commit();
+            }
+
+
+        }
+    }
+
+    public void updateTasks() {
+        RetreiveTasks retreiveTasks = new RetreiveTasks();
+        retreiveTasks.execute();
+    }
+
+
+    class RetreiveTasks extends AsyncTask<Void, Void, Boolean> {
+        private String responseString = "";
+        AppModel model = AppModel.getInstance();
+        User user = model.getCurrentUser();
+
+        public RetreiveTasks() {
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            OutputStream os = null;
+            InputStream is = null;
+            HttpURLConnection httpURLConnection = null;
+
+            String urlString = "https://easion.parantion.nl/api?Action=GetTasks";
+            urlString += "&Key=" + model.getAuthentication_SID();
+            urlString += "&Uid=" + model.getAuthentication_UID();
+            Log.e("testTag10", "url = " + urlString);
+
+            try {
+                URL url = new URL(urlString);
+
+                httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("GET");
+                httpURLConnection.setConnectTimeout(3000);
+                httpURLConnection.setReadTimeout(3000);
+                httpURLConnection.setDoOutput(true);
+
+                is = new BufferedInputStream(httpURLConnection.getInputStream());
+
+                String response = IOUtils.toString(is, StandardCharsets.UTF_8);
+
+                if (response.contains("Error") || response.contains("error")) {
+                    return false;
+                } else {
+                    responseString += response;
+                }
+                return true;
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                IOUtils.closeQuietly(is);
+                httpURLConnection.disconnect();
+            }
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            String tempString = "";
+            if (success) {
+                try {
+                    final InputStream stream = new ByteArrayInputStream(responseString.getBytes(StandardCharsets.UTF_8));
+                    DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+                    Document doc = builder.parse(stream);
+
+                    NodeList nodeList = doc.getElementsByTagName("Tasks");
+                    for (int i = 0; i < nodeList.getLength(); i++) {
+                        Element element = (Element) nodeList.item(i);
+                        if (element == null) {
+                        } else {
+                            NodeList tasksList = element.getChildNodes();
+
+                            for (int z = 0; z < tasksList.getLength(); z++) {
+                                Element e = (Element) tasksList.item(z);
+
+                                NodeList taskNL = e.getChildNodes();
+                                final String[] tempArray = {"Id", "Date", "Sender", "Label", "Message", "Progress", "Link", "Fid"};
+
+                                Enquete tempEnquete = new Enquete();
+
+                                for (int q = 0; q < taskNL.getLength(); q++) {
+                                    Element el = (Element) taskNL.item(q);
+                                    String res = LoginActivity.getCharacterDataFromElement(el);
+                                    switch (el.getNodeName()) {
+                                        case "Id":
+                                            tempEnquete.setUnique_ID(Integer.parseInt(res));
+                                            break;
+                                        case "Date":
+                                            tempEnquete.setCreationDate(res);
+                                            break;
+                                        case "Sender":
+                                            tempEnquete.setSender(res);
+                                            break;
+                                        case "Label":
+                                            tempEnquete.setLabel(res);
+                                            break;
+                                        case "Message":
+                                            tempEnquete.setMessage(res);
+                                            break;
+                                        case "Progress":
+                                            tempEnquete.setProgress(Integer.parseInt(res));
+                                            break;
+                                        case "Link":
+                                            tempEnquete.setLink(res);
+                                            break;
+                                        case "Fid":
+                                            tempEnquete.setFid(res);
+                                            break;
+                                    }
+                                }
+                                user.addEnquete(tempEnquete);
+
+                                FragmentManager fm = getSupportFragmentManager();
+
+                                if (fm.findFragmentById(R.id.content_frame) instanceof EnquetesFragment){
+                                    Log.e("testTag1337","ya1");
+                                    EnquetesFragment enq;
+                                    enq = (EnquetesFragment) fm.findFragmentById(R.id.content_frame);
+
+                                    FragmentManager subfm = enq.getChildFragmentManager();
+
+                                    Fragment frag =(Fragment)enq.getViewPager().getAdapter().instantiateItem(enq.getViewPager(),enq.getViewPager().getCurrentItem());
+                                    if (frag instanceof AllTabFragment){
+                                        Log.e("testTag1337","ya2");
+                                    }else{
+                                        Log.e("testTag1337","na2");
+                                    }
+
+                                }else {
+                                    Log.e("testTag1337","nah1");
+                                }
+
+                            }
+                        }
+                    }
+                } catch (SAXException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ParserConfigurationException e) {
+                    e.printStackTrace();
+                }
             }
 
 

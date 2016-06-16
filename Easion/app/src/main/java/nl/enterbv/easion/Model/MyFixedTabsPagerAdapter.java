@@ -3,6 +3,7 @@ package nl.enterbv.easion.Model;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.view.ViewGroup;
 
 import nl.enterbv.easion.Fragments.tabs.AllTabFragment;
 import nl.enterbv.easion.Fragments.tabs.BezigTabFragment;
@@ -63,9 +64,14 @@ public class MyFixedTabsPagerAdapter extends FragmentStatePagerAdapter {
             case 3:
                 return "Klaar";
             default:
-                return "test";
+                return "error";
 
         }
 
+    }
+
+    @Override
+    public Object instantiateItem(ViewGroup container, int position) {
+        return super.instantiateItem(container, position);
     }
 }
