@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class EnquetesFragment extends Fragment {
     List<Enquete> enqList = new ArrayList<>();
     TaskListAdapter taskListAdapter;
     View mView;
+    TextView taskCounter;
 
     @Override
     public void onAttach(Context context) {
@@ -151,6 +153,22 @@ public class EnquetesFragment extends Fragment {
 
 
         tab0.select();
+        taskCounter = (TextView) mView.findViewById(R.id.tv_enquetes_count);
+        switch (tabLayout.getSelectedTabPosition()) {
+            case 0:
+                taskCounter.setText(""+enqList.size());
+                break;
+            case 1:
+                taskCounter.setText(""+enqList.size());
+                break;
+            case 2:
+                taskCounter.setText(""+enqList.size());
+                break;
+            case 3:
+                taskCounter.setText(""+enqList.size());
+                break;
+        }
+
         return mView;
     }
 
@@ -185,6 +203,20 @@ public class EnquetesFragment extends Fragment {
         }
 
         taskListAdapter.notifyDataSetChanged();
+        switch (tabLayout.getSelectedTabPosition()) {
+            case 0:
+                taskCounter.setText(""+enqList.size());
+                break;
+            case 1:
+                taskCounter.setText(""+enqList.size());
+                break;
+            case 2:
+                taskCounter.setText(""+enqList.size());
+                break;
+            case 3:
+                taskCounter.setText(""+enqList.size());
+                break;
+        }
         mView.invalidate();
 
         Log.e("testTag12", "list size = " + enqList.size());
