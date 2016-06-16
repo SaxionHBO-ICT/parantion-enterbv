@@ -116,6 +116,24 @@ public class EnquetesFragment extends Fragment {
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+                        currentTabNr = 0;
+                        break;
+                    case 1:
+                        currentTabNr = 1;
+                        break;
+                    case 2:
+                        currentTabNr = 2;
+                        break;
+                    case 3:
+                        currentTabNr = 3;
+                        break;
+                    default:
+                        currentTabNr = 0;
+                        break;
+                }
+
                 changeTab(currentTabNr);
 
             }
