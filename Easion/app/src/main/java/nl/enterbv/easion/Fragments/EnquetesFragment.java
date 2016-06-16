@@ -39,7 +39,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import nl.enterbv.easion.Activities.LoginActivity;
-import nl.enterbv.easion.Activities.MainActivity;
 import nl.enterbv.easion.Controller.OnSwipeTouchListener;
 import nl.enterbv.easion.Model.AppModel;
 import nl.enterbv.easion.Model.Enquete;
@@ -283,8 +282,6 @@ public class EnquetesFragment extends Fragment {
     }
 
 
-
-
     class TaskRetreiver extends AsyncTask<Void, Void, Boolean> {
         private String responseString = "";
         AppModel model = AppModel.getInstance();
@@ -339,6 +336,9 @@ public class EnquetesFragment extends Fragment {
         @Override
         protected void onPostExecute(Boolean success) {
             String tempString = "";
+            enqList.clear();
+            user.getEnqueteList().clear();
+
             if (success) {
                 try {
                     final InputStream stream = new ByteArrayInputStream(responseString.getBytes(StandardCharsets.UTF_8));
@@ -405,7 +405,8 @@ public class EnquetesFragment extends Fragment {
                 }
             }
             taskListAdapter.notifyDataSetChanged();
-
+            changeTab(currentTabNr);
+            Log.e("testTag12", "refreshed succesfully");
         }
     }
 
