@@ -3,7 +3,6 @@ package nl.enterbv.easion.Fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -47,8 +46,7 @@ public class EnquetesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_enquetes, container, false);
         enqList.clear();
-        enqList = user.getEnqueteList();
-
+        enqList.addAll(user.getEnqueteList());
 
 
         tabLayout = (TabLayout) mView.findViewById(R.id.tab_layout);
@@ -62,7 +60,7 @@ public class EnquetesFragment extends Fragment {
         final TabLayout.Tab tab1 = tabLayout.getTabAt(1);
         final TabLayout.Tab tab2 = tabLayout.getTabAt(2);
         final TabLayout.Tab tab3 = tabLayout.getTabAt(3);
-        taskListAdapter = new TaskListAdapter(getContext(),enqList);
+        taskListAdapter = new TaskListAdapter(getContext(), enqList);
 
         taskList = (ListView) mView.findViewById(R.id.taskLV);
         taskList.setAdapter(taskListAdapter);
@@ -141,10 +139,9 @@ public class EnquetesFragment extends Fragment {
     private void changeTab(int pos) {
         enqList.clear();
         Toast.makeText(getContext(), "tab gewisseld :D", Toast.LENGTH_SHORT).show();
-
         switch (pos) {
             case 0:
-                enqList = user.getEnqueteList();
+                enqList.addAll(user.getEnqueteList());
                 break;
             case 1:
                 for (Enquete e : user.getEnqueteList()) {
@@ -172,6 +169,8 @@ public class EnquetesFragment extends Fragment {
         taskListAdapter.notifyDataSetChanged();
         mView.invalidate();
 
+        Log.e("testTag12", "list size = " + enqList.size());
+        Log.e("testTag12", "user list size = " + user.getEnqueteList().size());
     }
 
     @Override
