@@ -53,8 +53,6 @@ import nl.enterbv.easion.R;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private ActionBarDrawerToggle toggle;
-    public static String finalUsername;
-    public static String finalPassword;
     private NavigationView navigationView;
 
     @Override
@@ -64,12 +62,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //Recieve intent
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-
-        finalUsername = intent.getStringExtra("finalUsername");
-        finalPassword = intent.getStringExtra("finalPassword");
 
         final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -303,6 +295,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String tempString = "";
             if (success) {
                 try {
+                    user.getEnqueteList().clear();
                     final InputStream stream = new ByteArrayInputStream(responseString.getBytes(StandardCharsets.UTF_8));
                     DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
                     Document doc = builder.parse(stream);

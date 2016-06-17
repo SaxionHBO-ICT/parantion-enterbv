@@ -1,11 +1,14 @@
 package nl.enterbv.easion.Fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,8 +16,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Document;
@@ -38,6 +43,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import nl.enterbv.easion.Activities.EnqueteWebViewActivity;
 import nl.enterbv.easion.Activities.LoginActivity;
 import nl.enterbv.easion.Controller.OnSwipeTouchListener;
 import nl.enterbv.easion.Model.AppModel;
@@ -45,6 +51,8 @@ import nl.enterbv.easion.Model.Enquete;
 import nl.enterbv.easion.Model.TaskListAdapter;
 import nl.enterbv.easion.Model.User;
 import nl.enterbv.easion.R;
+
+import static java.security.AccessController.getContext;
 
 /**
  * Created by user on 12/31/15.
@@ -89,7 +97,6 @@ public class EnquetesFragment extends Fragment {
 
         taskList = (ListView) mView.findViewById(R.id.taskLV);
         taskList.setAdapter(taskListAdapter);
-        Log.e("testTag12", taskList.getAdapter().getCount() + "");
         taskList.setOnTouchListener(new OnSwipeTouchListener(getContext()) {
             @Override
             public void onSwipeLeft() {
@@ -193,6 +200,34 @@ public class EnquetesFragment extends Fragment {
         }
 
         setHasOptionsMenu(true);
+
+        taskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Enquete e = (Enquete) taskList.getAdapter().getItem(position);
+//                FragmentManager fm = getFragmentManager();
+//                FragmentTransaction ft = fm.beginTransaction();
+//                SurveyWebviewFragment surveyWebviewFragment = new SurveyWebviewFragment();
+//                Bundle b = new Bundle();
+//                b.putString("URL", e.getLink());
+//                surveyWebviewFragment.setArguments(b);
+//
+//                ft.addToBackStack(null);
+//                //ft.hide(EnquetesFragment.this);
+//                ft.replace(R.id.content_frame,surveyWebviewFragment);
+//
+//                ft.commit();
+
+                Intent i = new Intent(getContext(), EnqueteWebViewActivity.class);
+                i.putExtra("URL",e.getLink());
+                startActivity(i);
+
+
+
+            }
+        });
+
+
         return mView;
     }
 

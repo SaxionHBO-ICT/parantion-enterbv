@@ -11,8 +11,17 @@
      <!--   <item name="windowActionBar">false</item> -->
     <!--    <item name="windowNoTitle">true</item> -->
         <item name="colorAccent">@color/accent_material_light</item>
+        <item name="android:textColorSecondary">@color/itemSelected</item>
 
     </style>
+
+
+<style name="AppThemeSecondary" parent="AppTheme">
+    <item name="colorControlNormal">@color/itemSelected</item>
+
+</style>
+
+
 
     <style name="StyledDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorPrimary">@color/colorPrimary</item>

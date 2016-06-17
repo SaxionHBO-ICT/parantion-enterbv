@@ -1,5 +1,6 @@
 package nl.enterbv.easion.Fragments;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,10 +10,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.apache.commons.io.IOUtils;
@@ -81,34 +82,29 @@ public class SettingsFragment extends Fragment {
                 if (!et_Email.getText().toString().contentEquals(user.getEmail())) {
 
                     if (isEmailValid(et_Email.getText().toString())) {
-                        //user.setEmail(et_Email.getText().toString());
                         Log.e("testTag7", "email is valid");
                         UserFieldChangeTask fieldChangeTask = new UserFieldChangeTask("email", et_Email.getText().toString());
                         fieldChangeTask.execute();
-
                     } else {
                         Log.e("testTag7", "email invalid");
-                        Snackbar.make(myView,"Foutief email-adres",Snackbar.LENGTH_SHORT).show();
-
+                        Snackbar.make(myView, "Foutief email-adres", Snackbar.LENGTH_SHORT).show();
                     }
-
+                    InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 } else {
                     Log.e("testTag7", "nothing changed in email field");
                 }
             }
         });
 
-        Button undoButton = (Button)myView.findViewById(R.id.undoButton);
+        Button undoButton = (Button) myView.findViewById(R.id.undoButton);
         undoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!et_Email.getText().toString().contentEquals(user.getEmail()))
                     et_Email.setText(user.getEmail());
-
-
             }
         });
-
 
 
         return myView;
@@ -131,7 +127,7 @@ public class SettingsFragment extends Fragment {
     class UserFieldChangeTask extends AsyncTask<Void, Void, Boolean> {
         final String userfield;
         final String value;
-        private String responseString ="";
+        private String responseString = "";
 
         public UserFieldChangeTask(String field, String value) {
             userfield = field;
@@ -151,11 +147,11 @@ public class SettingsFragment extends Fragment {
             urlString += "&Var=" + userfield;
             urlString += "&Value=" + value;
 
-            Log.e("testTag7","settingsfrag:doInBackGround: link = "+urlString);
+            Log.e("testTag7", "settingsfrag:doInBackGround: link = " + urlString);
 
             try {
                 URL url = new URL(urlString);
-                httpURLConnection = (HttpURLConnection)url.openConnection();
+                httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("GET");
                 httpURLConnection.setConnectTimeout(3000);
                 httpURLConnection.setReadTimeout(3000);
@@ -187,11 +183,10 @@ public class SettingsFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Boolean success) {
-            if (success){
-                Snackbar.make(myView,"Veld succesvol aangepast",Snackbar.LENGTH_SHORT).show();
+            if (success) {
+                Snackbar.make(myView, "Veld succesvol aangepast", Snackbar.LENGTH_SHORT).show();
                 user.setEmail(et_Email.getText().toString());
             }
-
 
 
         }

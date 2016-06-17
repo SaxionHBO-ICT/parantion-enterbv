@@ -26,8 +26,8 @@
         <activity
             android:name=".Activities.LoginActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_login">
+            android:label="@string/title_activity_login"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,14 +36,11 @@
 
         </activity>
         <activity
-            android:name=".Activities.TabActivity"
-            android:label="@string/title_activity_tab"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-
-        <activity
-            android:name=".Activities.SettingsActivity"
-            android:label="Instellingen"
-            android:theme="@style/Theme.AppCompat.Dialog"></activity>
+            android:name=".Activities.EnqueteWebViewActivity"
+            android:label="Enquete"
+            android:theme="@style/AppThemeSecondary"
+            android:parentActivityName=".Activities.MainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
     </application>
 
 </manifest>

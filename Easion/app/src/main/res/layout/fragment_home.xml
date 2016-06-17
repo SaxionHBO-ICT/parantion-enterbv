@@ -4,39 +4,45 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:background="@drawable/textbox"
+        android:id="@+id/home_linearLayout"
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="Welkom "
+            android:textColor="#a860b0ff"
+            android:textSize="26sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/home_tv_gebruiker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp"
             android:gravity="center"
-            android:background="@drawable/textbox"
-            android:orientation="vertical">
+            android:text="GebruikerPlaceholder"
+            android:textColor="#a860b0ff"
+            android:textSize="25sp"
+            android:textStyle="bold" />
 
+    </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="26sp"
-                    android:textColor="#a860b0ff"
-                    android:layout_marginBottom="5dp"
-                    android:textStyle="bold"
-                    android:text="Welkom "/>
-
-                <TextView
-                    android:id="@+id/home_tv_gebruiker"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="GebruikerPlaceholder"
-                    android:textColor="#a860b0ff"
-                    android:gravity="center"
-                    android:layout_marginBottom="40dp"
-                    android:textSize="25sp"
-                    android:textStyle="bold"/>
-
-        </LinearLayout>
-    </ScrollView>
+    <ImageView
+        android:layout_below="@id/home_linearLayout"
+        android:id="@+id/home_iv_gebruiker"
+        android:layout_width="125dp"
+        android:layout_height="125dp"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:maxHeight="125dp"
+        android:maxWidth="125dp"
+        android:src="@drawable/default_profile" />
 </RelativeLayout>
