@@ -62,7 +62,7 @@
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:text="Email"
         android:textColor="#ffffff"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:background="#6E829A"
 
         android:layout_width="180dp"

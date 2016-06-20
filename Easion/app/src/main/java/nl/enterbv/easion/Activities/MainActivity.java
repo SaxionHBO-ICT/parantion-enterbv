@@ -1,6 +1,5 @@
 package nl.enterbv.easion.Activities;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,7 +18,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 
 import org.apache.commons.io.IOUtils;
@@ -51,9 +49,6 @@ import nl.enterbv.easion.Model.AppModel;
 import nl.enterbv.easion.Model.Enquete;
 import nl.enterbv.easion.Model.User;
 import nl.enterbv.easion.R;
-
-import static nl.enterbv.easion.Activities.LoginActivity.PREF_PASSWORD;
-import static nl.enterbv.easion.Activities.LoginActivity.PREF_USERNAME;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -250,6 +245,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void updateTasks() {
         RetreiveTasks retreiveTasks = new RetreiveTasks();
         retreiveTasks.execute();
+
     }
 
 
@@ -325,6 +321,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 Element e = (Element) tasksList.item(z);
 
                                 NodeList taskNL = e.getChildNodes();
+                                //tempArray never actually used, only for readability
                                 final String[] tempArray = {"Id", "Date", "Sender", "Label", "Message", "Progress", "Link", "Fid"};
 
                                 Enquete tempEnquete = new Enquete();

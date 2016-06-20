@@ -58,9 +58,7 @@ public class EnqueteWebViewActivity extends AppCompatActivity {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                //TODO fetch data from server to check for changes
-
-
+              //dont do anything special
                 return false;
             }
         });

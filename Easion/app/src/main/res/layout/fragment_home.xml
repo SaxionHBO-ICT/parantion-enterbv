@@ -44,7 +44,7 @@
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:maxHeight="175dp"
         android:maxWidth="175dp"
-        android:src="@drawable/default_profile" />
+        android:src="@drawable/easion_icon" />
 
     <TextView
         android:id="@+id/home_tv_amount_of_tasks"

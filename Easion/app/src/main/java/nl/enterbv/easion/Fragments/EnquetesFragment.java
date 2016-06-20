@@ -5,10 +5,9 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Document;
@@ -51,8 +49,6 @@ import nl.enterbv.easion.Model.Enquete;
 import nl.enterbv.easion.Model.TaskListAdapter;
 import nl.enterbv.easion.Model.User;
 import nl.enterbv.easion.R;
-
-import static java.security.AccessController.getContext;
 
 /**
  * Created by user on 12/31/15.
@@ -228,6 +224,14 @@ public class EnquetesFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.refresh:
                 refreshData();
+
+                //shows popup with text "Lijsten ophalen...", text aligned in center of popup
+                Snackbar snack = Snackbar.make(mView,"Lijsten ophalen...",Snackbar.LENGTH_SHORT);
+                View view = snack.getView();
+                TextView tv = (TextView)view.findViewById(android.support.design.R.id.snackbar_text);
+                tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                snack.show();
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -376,6 +380,7 @@ public class EnquetesFragment extends Fragment {
                                 Element e = (Element) tasksList.item(z);
 
                                 NodeList taskNL = e.getChildNodes();
+                                //tempArray not actually used: exists only for clarity. These are the possible fields retrievable from API
                                 final String[] tempArray = {"Id", "Date", "Sender", "Label", "Message", "Progress", "Link", "Fid"};
 
                                 Enquete tempEnquete = new Enquete();

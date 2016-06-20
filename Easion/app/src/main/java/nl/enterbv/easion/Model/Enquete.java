@@ -1,7 +1,5 @@
 package nl.enterbv.easion.Model;
 
-import java.util.Date;
-
 /**
  * Created by RubenW on 25-5-2016.
  */

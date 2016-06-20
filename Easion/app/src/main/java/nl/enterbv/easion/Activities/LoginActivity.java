@@ -265,20 +265,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    /*
-     * Give a requirement to the entered username and password
-     */
-    public boolean isUsernameValid(String username) {
-        //Username cant contain "x"
-        String[] strings = {"@", "."};
-        for (int i = 0; i < strings.length; i++) {
-            if (username.contains(strings[i]) == false) {
-
-            }
-        }
-        return username.contains("@");
-    }
-
     public static String getCharacterDataFromElement(Element e) {
 
         NodeList list = e.getChildNodes();
@@ -413,7 +399,14 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Snackbar.make(mProgressView, "Logging in....", Snackbar.LENGTH_SHORT).show();
+
+            //shows popup with text "logging in", text aligned in center of popup
+            Snackbar snack = Snackbar.make(mProgressView, "Logging in....", Snackbar.LENGTH_SHORT);
+            View view = snack.getView();
+            TextView snackTV = (TextView)view.findViewById(android.support.design.R.id.snackbar_text);
+            snackTV.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            snack.show();
+
 
         }
 
