@@ -85,6 +85,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         navigationView.getMenu().getItem(0).setChecked(true);
+
+        Log.e("testTag1337", "link = " + AppModel.getInstance().getCurrentUser().getProfilePhotoString());
+        Log.e("testTag1337", "uid = " + AppModel.getInstance().getAuthentication_UID());
+        Log.e("testTag1337", "sid = " + AppModel.getInstance().getAuthentication_SID());
+        Log.e("testTag1337", "oid = " + AppModel.getInstance().getAuthentication_OID());
+
+
+
     }
 
 

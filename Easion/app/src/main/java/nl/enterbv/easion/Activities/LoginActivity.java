@@ -122,8 +122,8 @@ public class LoginActivity extends AppCompatActivity {
         devLogin.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mUsernameView.setText("joep.vander.staaij");
-                mPasswordView.setText("T8qapane");
+                mUsernameView.setText("saxmoeuse01");
+                mPasswordView.setText("Welkom01");
                 attemptLogin();
             }
         });

@@ -6,10 +6,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.Observable;
-import java.util.Observer;
+import com.squareup.picasso.Picasso;
 
 import nl.enterbv.easion.Model.AppModel;
 import nl.enterbv.easion.Model.User;
@@ -18,8 +18,8 @@ import nl.enterbv.easion.R;
 /**
  * Created by user on 12/31/15.
  */
-public class HomeFragment extends Fragment{
-    private View myView;
+public class HomeFragment extends Fragment {
+    private View mView;
     private TextView naam;
     private AppModel model = AppModel.getInstance();
     private User user = model.getCurrentUser();
@@ -30,21 +30,34 @@ public class HomeFragment extends Fragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        myView = inflater.inflate(R.layout.fragment_home, container, false);
-        naam = (TextView) myView.findViewById(R.id.home_tv_gebruiker);
+        mView = inflater.inflate(R.layout.fragment_home, container, false);
+        naam = (TextView) mView.findViewById(R.id.home_tv_gebruiker);
 
-        if (user.getMiddlename() != null){
+        if (user.getMiddlename() != null) {
             updateView();
-        }else{
+        } else {
             naam.setText("default name");
         }
 
+        if (!user.getProfilePhotoString().isEmpty()) {
+
+            ImageView profileImage = (ImageView) mView.findViewById(R.id.home_iv_gebruiker);
+            StringBuilder profileImageUrl = new StringBuilder();
+            profileImageUrl.append("https://easion.parantion.nl/");
+            profileImageUrl.append(user.getProfilePhotoString());
+            profileImageUrl.append("&uid=");
+            profileImageUrl.append(model.getAuthentication_UID());
+
+            Picasso.with(getContext())
+                    .load(profileImageUrl.toString())
+                    .into(profileImage);
 
 
-        return myView;
+        }
+        return mView;
     }
 
-    public void updateView(){
+    public void updateView() {
         String name = user.getFirstname();
         if (!user.getMiddlename().isEmpty() || !user.getMiddlename().contentEquals(" ")) {
             name += " " + user.getMiddlename();
