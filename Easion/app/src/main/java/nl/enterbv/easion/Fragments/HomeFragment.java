@@ -38,14 +38,15 @@ public class HomeFragment extends Fragment {
         mView = inflater.inflate(R.layout.fragment_home_v2, container, false);
         naam = (TextView) mView.findViewById(R.id.hometwo_tv_name);
 
+        //checks whether user has a middlename
         if (user.getMiddlename() != null) {
             updateView();
         } else {
             naam.setText("default name");
         }
 
+        //Checks if user has a profile image set and sets the imageview as such when that is the case.
         if (!user.getProfilePhotoString().isEmpty()) {
-
             ImageView profileImage = (ImageView) mView.findViewById(R.id.hometwo_iv_profile);
             StringBuilder profileImageUrl = new StringBuilder();
             profileImageUrl.append("https://easion.parantion.nl/");
@@ -64,6 +65,7 @@ public class HomeFragment extends Fragment {
         final Handler handler = new Handler();
 
 
+        //Keeps checking if enquete-list has been retreived. When it has, stop checking.
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -85,6 +87,9 @@ public class HomeFragment extends Fragment {
         }, 1000);
 
 
+        /*
+            If user has these profile variables, show them. Otherwise, make these views invissible.
+         */
         TextView uitstroomProfiel = (TextView) mView.findViewById(R.id.hometwo_tv_uitstroomprofiel);
         if (!Strings.isNullOrEmpty(user.getOutstreamProfile())) {
             uitstroomProfiel.setText(user.getOutstreamProfile());
@@ -93,6 +98,17 @@ public class HomeFragment extends Fragment {
             uitstroomProfielLabel.setVisibility(View.INVISIBLE);
             uitstroomProfiel.setVisibility(View.INVISIBLE);
         }
+        TextView studentNummer = (TextView)mView.findViewById(R.id.hometwo_tv_studentnummer);
+        TextView studentNummerLabel = (TextView)mView.findViewById(R.id.hometwo_tv_studentnummerlabel);
+
+        if (user.getStudentNummer() !=0){
+            studentNummer.setText(user.getStudentNummer() +"");
+        }else{
+            studentNummer.setVisibility(View.INVISIBLE);
+            studentNummerLabel.setVisibility(View.INVISIBLE);
+        }
+
+
         return mView;
     }
 
@@ -100,19 +116,11 @@ public class HomeFragment extends Fragment {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(user.getFirstname() + " ");
 
-
         if (!Strings.isNullOrEmpty(user.getMiddlename())) {
             stringBuilder.append(user.getMiddlename() + " ");
         }
+
         stringBuilder.append(user.getLastname());
-
-
-//        String name = user.getFirstname();
-//        if (!user.getMiddlename().isEmpty() || !user.getMiddlename().contentEquals(" ")) {
-//            name += " " + user.getMiddlename();
-//        }
-//        name += " " + user.getLastname();
-
         naam.setText(stringBuilder.toString());
     }
 
@@ -120,7 +128,6 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
 
         getActivity().setTitle("Home");
     }
