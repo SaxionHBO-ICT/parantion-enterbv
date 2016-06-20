@@ -43,7 +43,6 @@ public class SettingsFragment extends Fragment {
     private EditText et_Email;
 
     public SettingsFragment() {
-        Log.e("testTag", "settingsfragment constructor");
     }
 
     @Override
@@ -79,6 +78,8 @@ public class SettingsFragment extends Fragment {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 if (!et_Email.getText().toString().contentEquals(user.getEmail())) {
 
                     if (isEmailValid(et_Email.getText().toString())) {
@@ -89,10 +90,10 @@ public class SettingsFragment extends Fragment {
                         Log.e("testTag7", "email invalid");
                         Snackbar.make(myView, "Foutief email-adres", Snackbar.LENGTH_SHORT).show();
                     }
-                    InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
                 } else {
                     Log.e("testTag7", "nothing changed in email field");
+                    Snackbar.make(myView,"Geen veranderingen in email-veld",Snackbar.LENGTH_SHORT).show();
                 }
             }
         });

@@ -5,13 +5,15 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -68,6 +70,8 @@ public class LoginActivity extends AppCompatActivity {
     private User user = model.getCurrentUser();
     private String finalUsername;
     private String finalPassword;
+    public static final String PREF_USERNAME = "username";
+    public static final String PREF_PASSWORD = "password";
 
 
     /**
@@ -80,8 +84,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-
-    protected boolean shouldGoToNextActivity = false;
 
 
     @Override
@@ -128,7 +130,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        Button devLoginJoep = (Button)findViewById(R.id.devLogin_joep);
+        Button devLoginJoep = (Button) findViewById(R.id.devLogin_joep);
         devLoginJoep.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,15 +151,32 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String url = "https://scorion3.parantion.nl/mailpassword/";
-                Intent websiteIntent = new Intent(Intent.ACTION_VIEW);
-                websiteIntent.setData(Uri.parse(url));
-                startActivity(websiteIntent);
+                Intent lostPwIntent = new Intent(LoginActivity.this, EnqueteWebViewActivity.class);
+                lostPwIntent.putExtra("URL", url);
+                startActivity(lostPwIntent);
+
             }
         });
 
 
     }
 
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        String username = pref.getString(PREF_USERNAME, null);
+        String password = pref.getString(PREF_PASSWORD, null);
+
+        if (username != null || password != null) {
+            Log.e("testTag1337", "sharedprefs is null");
+            mUsernameView.setText(username);
+            mPasswordView.setText(password);
+            attemptLogin();
+        }
+    }
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -169,6 +188,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
+
         // Reset errors.
         mUsernameView.setError(null);
         mPasswordView.setError(null);
@@ -176,6 +196,16 @@ public class LoginActivity extends AppCompatActivity {
         // Store values at the time of the login attempt.
         String username = mUsernameView.getText().toString();
         String password = mPasswordView.getText().toString();
+
+
+        //stores login
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+
+        pref.edit()
+                .putString(PREF_USERNAME, username)
+                .putString(PREF_PASSWORD, password)
+                .commit();
+
 
         boolean cancel = false;
         View focusView = null;
@@ -599,7 +629,7 @@ public class LoginActivity extends AppCompatActivity {
                                     break;
                                 case "uitstroom":
                                     user.setOutstreamProfile(tempString);
-                                    Log.e("testTag1337","outstroom =" + tempString);
+                                    Log.e("testTag1337", "outstroom =" + tempString);
                                     break;
                                 case "last_login":
                                     user.setLastLoginDate(tempString);

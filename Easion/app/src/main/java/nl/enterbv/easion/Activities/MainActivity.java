@@ -1,9 +1,12 @@
 package nl.enterbv.easion.Activities;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -16,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 
 import org.apache.commons.io.IOUtils;
@@ -47,6 +51,9 @@ import nl.enterbv.easion.Model.AppModel;
 import nl.enterbv.easion.Model.Enquete;
 import nl.enterbv.easion.Model.User;
 import nl.enterbv.easion.R;
+
+import static nl.enterbv.easion.Activities.LoginActivity.PREF_PASSWORD;
+import static nl.enterbv.easion.Activities.LoginActivity.PREF_USERNAME;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -87,7 +94,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.getMenu().getItem(0).setChecked(true);
 
         Log.e("testTag1337", "link = " + AppModel.getInstance().getCurrentUser().getProfilePhotoString());
-
 
 
 
@@ -133,6 +139,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Log.e("testTag", "user wished to log out.");
+
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                        prefs.edit().clear().commit();
+
 
                         Intent i = new Intent(MainActivity.this, LoginActivity.class);
                         startActivity(i);
@@ -243,7 +253,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-   class RetreiveTasks extends AsyncTask<Void, Void, Boolean> {
+    class RetreiveTasks extends AsyncTask<Void, Void, Boolean> {
         private String responseString = "";
         AppModel model = AppModel.getInstance();
         User user = model.getCurrentUser();

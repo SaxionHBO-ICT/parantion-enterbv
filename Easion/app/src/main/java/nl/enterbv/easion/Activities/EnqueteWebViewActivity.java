@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.WebView;
@@ -23,12 +24,9 @@ import nl.enterbv.easion.R;
 public class EnqueteWebViewActivity extends AppCompatActivity {
 
 
-
     @Override
     public void onPostCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onPostCreate(savedInstanceState, persistentState);
-
-        setTitle("Test");
     }
 
     @Override
@@ -49,8 +47,7 @@ public class EnqueteWebViewActivity extends AppCompatActivity {
         surveyWebView.clearHistory();
         surveyWebView.clearCache(true);
         clearCookies(this);
-
-
+        surveyWebView.getSettings().setJavaScriptEnabled(true);
         if (!url.equals("")) {
             surveyWebView.loadUrl(url);
 
@@ -70,6 +67,9 @@ public class EnqueteWebViewActivity extends AppCompatActivity {
 
     }
 
+    /*
+       Clears all cookies to prevent webpage from re-using previous webview session, even after user has logged onto a different account
+     */
     @SuppressWarnings("deprecation")
     public static void clearCookies(Context context) {
 
@@ -88,6 +88,15 @@ public class EnqueteWebViewActivity extends AppCompatActivity {
     }
 
 
-
-
+    /**
+     * catches 'home' button click in the webview, giving it the same behaviour as a 'back' key press.
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

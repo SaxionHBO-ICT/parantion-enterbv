@@ -205,25 +205,10 @@ public class EnquetesFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Enquete e = (Enquete) taskList.getAdapter().getItem(position);
-//                FragmentManager fm = getFragmentManager();
-//                FragmentTransaction ft = fm.beginTransaction();
-//                SurveyWebviewFragment surveyWebviewFragment = new SurveyWebviewFragment();
-//                Bundle b = new Bundle();
-//                b.putString("URL", e.getLink());
-//                surveyWebviewFragment.setArguments(b);
-//
-//                ft.addToBackStack(null);
-//                //ft.hide(EnquetesFragment.this);
-//                ft.replace(R.id.content_frame,surveyWebviewFragment);
-//
-//                ft.commit();
 
                 Intent i = new Intent(getContext(), EnqueteWebViewActivity.class);
                 i.putExtra("URL",e.getLink());
                 startActivity(i);
-
-
-
             }
         });
 
