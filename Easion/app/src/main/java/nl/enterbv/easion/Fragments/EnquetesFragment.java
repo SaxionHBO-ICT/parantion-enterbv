@@ -29,7 +29,6 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -316,7 +315,6 @@ public class EnquetesFragment extends Fragment {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            OutputStream os = null;
             InputStream is = null;
             HttpURLConnection httpURLConnection = null;
 
@@ -359,7 +357,6 @@ public class EnquetesFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Boolean success) {
-            String tempString = "";
             enqList.clear();
             user.getEnqueteList().clear();
 

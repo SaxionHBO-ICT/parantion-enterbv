@@ -43,7 +43,6 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -216,11 +215,7 @@ public class LoginActivity extends AppCompatActivity {
             focusView = mUsernameView;
             cancel = true;
         }
-//        } else if (isUsernameValid(username)) {
-//            mUsernameView.setError(getString(R.string.error_invalid_username));
-//            focusView = mUsernameView;
-//            cancel = true;
-//        }
+
         if (TextUtils.isEmpty(password)) {
             mPasswordView.setError("This field is required");
             focusView = mPasswordView;
@@ -261,6 +256,7 @@ public class LoginActivity extends AppCompatActivity {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
+            focusView.requestFocus();
         }
     }
 
@@ -347,9 +343,8 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            OutputStream os = null;
-            InputStream is = null;
-            HttpURLConnection httpURLConnection = null;
+            InputStream is;
+            HttpURLConnection httpURLConnection;
             String urlString = "https://easion.parantion.nl/api?Action=Authenticate";
             try {
                 urlString += "&key=" + AppModel.getInstance().getAuthentication_OID();
@@ -527,7 +522,6 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            OutputStream os = null;
             InputStream is = null;
             Log.e("testTag2", "sid =" + AppModel.getInstance().getAuthentication_SID());
             HttpURLConnection httpURLConnection = null;

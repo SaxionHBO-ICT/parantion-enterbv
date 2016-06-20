@@ -7,5 +7,5 @@
         android:id="@+id/refresh"
         android:icon="@drawable/refresh"
         app:showAsAction="ifRoom"
-        android:title="Refresh"></item>
+        android:title="Refresh"/>
 </menu>

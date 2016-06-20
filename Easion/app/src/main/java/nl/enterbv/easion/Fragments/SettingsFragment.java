@@ -21,7 +21,6 @@ import org.apache.commons.io.IOUtils;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -138,9 +137,8 @@ public class SettingsFragment extends Fragment {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            OutputStream os = null;
-            InputStream is = null;
-            HttpURLConnection httpURLConnection = null;
+            InputStream is;
+            HttpURLConnection httpURLConnection;
 
             String urlString = "https://easion.parantion.nl/api?Action=SetUserField&Key=";
             urlString += model.getAuthentication_SID();
