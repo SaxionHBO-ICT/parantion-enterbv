@@ -9,11 +9,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.common.base.Strings;
 import com.squareup.picasso.Picasso;
 
 import nl.enterbv.easion.Model.AppModel;
 import nl.enterbv.easion.Model.User;
 import nl.enterbv.easion.R;
+
+import static android.R.attr.name;
 
 /**
  * Created by user on 12/31/15.
@@ -58,13 +61,23 @@ public class HomeFragment extends Fragment {
     }
 
     public void updateView() {
-        String name = user.getFirstname();
-        if (!user.getMiddlename().isEmpty() || !user.getMiddlename().contentEquals(" ")) {
-            name += " " + user.getMiddlename();
-        }
-        name += " " + user.getLastname();
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(user.getFirstname() + " ");
 
-        naam.setText(name);
+
+        if (!Strings.isNullOrEmpty(user.getMiddlename())){
+            stringBuilder.append(user.getMiddlename() + " ");
+        }
+        stringBuilder.append(user.getLastname());
+
+
+//        String name = user.getFirstname();
+//        if (!user.getMiddlename().isEmpty() || !user.getMiddlename().contentEquals(" ")) {
+//            name += " " + user.getMiddlename();
+//        }
+//        name += " " + user.getLastname();
+
+        naam.setText(stringBuilder.toString());
     }
 
 
