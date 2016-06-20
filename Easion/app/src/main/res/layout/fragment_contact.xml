@@ -31,6 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/textView4"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:id="@+id/contact_tv_email"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:text="info@parantion.com"
         android:textSize="18sp"
