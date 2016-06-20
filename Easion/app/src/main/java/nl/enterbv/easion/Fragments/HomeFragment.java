@@ -1,8 +1,10 @@
 package nl.enterbv.easion.Fragments;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +15,9 @@ import com.google.common.base.Strings;
 import com.squareup.picasso.Picasso;
 
 import nl.enterbv.easion.Model.AppModel;
+import nl.enterbv.easion.Model.Enquete;
 import nl.enterbv.easion.Model.User;
 import nl.enterbv.easion.R;
-
-import static android.R.attr.name;
 
 /**
  * Created by user on 12/31/15.
@@ -26,6 +27,7 @@ public class HomeFragment extends Fragment {
     private TextView naam;
     private AppModel model = AppModel.getInstance();
     private User user = model.getCurrentUser();
+    private int taskCounter = 0;
 
     public HomeFragment() {
     }
@@ -57,6 +59,32 @@ public class HomeFragment extends Fragment {
 
 
         }
+
+        final TextView amountOfTasks = (TextView) mView.findViewById(R.id.home_tv_amount_of_tasks);
+        final Handler handler = new Handler();
+
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                for (Enquete e : user.getEnqueteList()) {
+                    if (e.getProgress() == 0 || e.getProgress() == 1) {
+                        taskCounter++;
+                    }
+                }
+
+                amountOfTasks.setText("Je hebt " + taskCounter + " open taken op je wachten.");
+                Log.e("testTag1337", "ping");
+                handler.postDelayed(this, 1000);
+                if (taskCounter>0){
+                    handler.removeCallbacksAndMessages(null);
+                }
+
+
+            }
+        }, 1000);
+
+
         return mView;
     }
 
@@ -65,7 +93,7 @@ public class HomeFragment extends Fragment {
         stringBuilder.append(user.getFirstname() + " ");
 
 
-        if (!Strings.isNullOrEmpty(user.getMiddlename())){
+        if (!Strings.isNullOrEmpty(user.getMiddlename())) {
             stringBuilder.append(user.getMiddlename() + " ");
         }
         stringBuilder.append(user.getLastname());

@@ -84,9 +84,9 @@ public class EnquetesFragment extends Fragment {
 
         tabLayout = (TabLayout) mView.findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Alles"));
-        tabLayout.addTab(tabLayout.newTab().setText("TodO"));
-        tabLayout.addTab(tabLayout.newTab().setText("Busy"));
-        tabLayout.addTab(tabLayout.newTab().setText("Done"));
+        tabLayout.addTab(tabLayout.newTab().setText("Nieuw"));
+        tabLayout.addTab(tabLayout.newTab().setText("Bezig"));
+        tabLayout.addTab(tabLayout.newTab().setText("Klaar"));
         currentTabNr = tabLayout.getSelectedTabPosition();
 
         final TabLayout.Tab tab0 = tabLayout.getTabAt(0);
