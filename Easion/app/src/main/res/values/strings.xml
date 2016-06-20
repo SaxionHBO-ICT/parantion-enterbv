@@ -5,7 +5,7 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_tab_activity_test">TabActivityTest</string>
     <string name="title_activity_login">Easion</string>
-
+    <string name="dummy">DummyText</string>
     <!-- Strings related to login -->
     <string name="prompt_username">Username</string>
     <string name="prompt_password">Password</string>

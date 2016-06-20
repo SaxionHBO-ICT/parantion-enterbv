@@ -36,16 +36,16 @@
 
                 <AutoCompleteTextView
                     android:id="@+id/username"
-                    android:textCursorDrawable="@null"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_username"
                     android:imeOptions="actionNext"
-                    android:nextFocusDown="@+id/password"
-                    android:textSize="18sp"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:nextFocusDown="@+id/password"
+                    android:singleLine="true"
+                    android:textCursorDrawable="@null"
+                    android:textSize="18sp" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -58,14 +58,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_password"
-                    android:textCursorDrawable="@drawable/login_cursor"
                     android:imeActionId="@+id/login"
                     android:imeActionLabel="@string/action_sign_in"
                     android:imeOptions="actionGo"
-                    android:textSize="18sp"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textCursorDrawable="@drawable/login_cursor"
+                    android:textSize="18sp" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -78,19 +78,34 @@
                 android:text="@string/action_sign_in"
                 android:textStyle="bold" />
 
-            <Button
-                android:text="devLogin"
-                android:layout_marginTop="30dp"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/devButton" />
+                android:layout_marginTop="30dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/devButton"
+                    android:layout_width="1dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="devLogin test" />
+
+                <Button
+                    android:id="@+id/devLogin_joep"
+                    android:layout_width="1dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="devLogin joep" />
+
+            </LinearLayout>
 
             <Button
+                android:id="@+id/bttn_lostpassword"
                 android:layout_width="match_parent"
-                android:layout_marginTop="30dp"
                 android:layout_height="wrap_content"
-                android:text="Wachtwoord Vergeten"
-                android:id="@+id/bttn_lostpassword"/>
+                android:layout_marginTop="30dp"
+                android:text="Wachtwoord Vergeten" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

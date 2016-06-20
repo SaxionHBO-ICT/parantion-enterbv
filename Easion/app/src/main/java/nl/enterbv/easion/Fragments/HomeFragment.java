@@ -35,8 +35,8 @@ public class HomeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mView = inflater.inflate(R.layout.fragment_home, container, false);
-        naam = (TextView) mView.findViewById(R.id.home_tv_gebruiker);
+        mView = inflater.inflate(R.layout.fragment_home_v2, container, false);
+        naam = (TextView) mView.findViewById(R.id.hometwo_tv_name);
 
         if (user.getMiddlename() != null) {
             updateView();
@@ -46,7 +46,7 @@ public class HomeFragment extends Fragment {
 
         if (!user.getProfilePhotoString().isEmpty()) {
 
-            ImageView profileImage = (ImageView) mView.findViewById(R.id.home_iv_gebruiker);
+            ImageView profileImage = (ImageView) mView.findViewById(R.id.hometwo_iv_profile);
             StringBuilder profileImageUrl = new StringBuilder();
             profileImageUrl.append("https://easion.parantion.nl/");
             profileImageUrl.append(user.getProfilePhotoString());
@@ -60,7 +60,7 @@ public class HomeFragment extends Fragment {
 
         }
 
-        final TextView amountOfTasks = (TextView) mView.findViewById(R.id.home_tv_amount_of_tasks);
+        final TextView amountOfTasks = (TextView) mView.findViewById(R.id.hometwo_tv_taskcounter);
         final Handler handler = new Handler();
 
 
@@ -76,7 +76,7 @@ public class HomeFragment extends Fragment {
                 amountOfTasks.setText("Je hebt " + taskCounter + " open taken op je wachten.");
                 Log.e("testTag1337", "ping");
                 handler.postDelayed(this, 1000);
-                if (taskCounter>0){
+                if (taskCounter > 0) {
                     handler.removeCallbacksAndMessages(null);
                 }
 
@@ -85,6 +85,14 @@ public class HomeFragment extends Fragment {
         }, 1000);
 
 
+        TextView uitstroomProfiel = (TextView) mView.findViewById(R.id.hometwo_tv_uitstroomprofiel);
+        if (!Strings.isNullOrEmpty(user.getOutstreamProfile())) {
+            uitstroomProfiel.setText(user.getOutstreamProfile());
+        }else{
+            TextView uitstroomProfielLabel = (TextView)mView.findViewById(R.id.hometwo_tv_uitstroomlabel);
+            uitstroomProfielLabel.setVisibility(View.INVISIBLE);
+            uitstroomProfiel.setVisibility(View.INVISIBLE);
+        }
         return mView;
     }
 

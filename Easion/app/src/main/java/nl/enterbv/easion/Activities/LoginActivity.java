@@ -128,6 +128,16 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        Button devLoginJoep = (Button)findViewById(R.id.devLogin_joep);
+        devLoginJoep.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mUsernameView.setText("joep.vander.staaij");
+                mPasswordView.setText("T8qapane");
+                attemptLogin();
+            }
+        });
+
 
         ProgressBar spinner = (ProgressBar) findViewById(R.id.login_progress);
         spinner.getIndeterminateDrawable().setColorFilter(Color.parseColor("#7FC8EC"),
@@ -589,6 +599,7 @@ public class LoginActivity extends AppCompatActivity {
                                     break;
                                 case "uitstroom":
                                     user.setOutstreamProfile(tempString);
+                                    Log.e("testTag1337","outstroom =" + tempString);
                                     break;
                                 case "last_login":
                                     user.setLastLoginDate(tempString);
