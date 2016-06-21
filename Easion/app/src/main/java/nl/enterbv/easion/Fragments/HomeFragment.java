@@ -74,8 +74,11 @@ public class HomeFragment extends Fragment {
                         taskCounter++;
                     }
                 }
-
-                amountOfTasks.setText("Je hebt " + taskCounter + " open taken op je wachten.");
+                if (taskCounter == 1) {
+                    amountOfTasks.setText("Je hebt " + taskCounter + " open taak op je wachten.");
+                } else {
+                    amountOfTasks.setText("Je hebt " + taskCounter + " open taken op je wachten.");
+                }
                 Log.e("testTag1337", "ping");
                 handler.postDelayed(this, 1000);
                 if (taskCounter > 0) {
