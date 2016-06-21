@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.google.common.base.Strings;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
 import nl.enterbv.easion.Model.AppModel;
 import nl.enterbv.easion.Model.Enquete;
 import nl.enterbv.easion.Model.User;
@@ -100,6 +102,13 @@ public class HomeFragment extends Fragment {
         }
         TextView studentNummer = (TextView)mView.findViewById(R.id.hometwo_tv_studentnummer);
         TextView studentNummerLabel = (TextView)mView.findViewById(R.id.hometwo_tv_studentnummerlabel);
+
+        TextView username = (TextView)mView.findViewById(R.id.hometwo_tv_gebruikersnaam);
+        username.setText(user.getUsername());
+
+        TextView email = (TextView)mView.findViewById(R.id.hometwo_tv_emailaddress);
+        email.setText(user.getEmail());
+
 
         if (user.getStudentNummer() !=0){
             studentNummer.setText(user.getStudentNummer() +"");
