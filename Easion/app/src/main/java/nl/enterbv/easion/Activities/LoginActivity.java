@@ -66,7 +66,6 @@ import static nl.enterbv.easion.R.id.username;
 public class LoginActivity extends AppCompatActivity {
     private Intent intent;
     private AppModel model = AppModel.getInstance();
-    private User user = model.getCurrentUser();
     private String finalUsername;
     private String finalPassword;
     public static final String PREF_USERNAME = "username";
