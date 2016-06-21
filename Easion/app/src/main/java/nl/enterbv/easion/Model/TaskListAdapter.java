@@ -41,17 +41,16 @@ public class TaskListAdapter extends ArrayAdapter<Enquete> {
         View progress = convertView.findViewById(R.id.item_progress);
 
 
-        //Progress of task: 0 = Not started, 1 = Started, 2 = Done
+        //Progress of task: 0 = Nieuw, 1 = Bezig, 2 = Klaar
         switch (getItem(position).getProgress()) {
             case 0:
-                progress.setBackgroundColor(Color.parseColor("#00FF00"));
+                progress.setBackgroundResource(R.drawable.nieuw);
                 break;
             case 1:
-                progress.setBackgroundColor(Color.parseColor("#FFFF00"));
+                progress.setBackgroundResource(R.drawable.bezig);
                 break;
             case 2:
-                progress.setBackgroundColor(Color.parseColor("#FF0000"));
-
+                progress.setBackgroundResource(R.drawable.klaar);
                 break;
             default:
                 break;
