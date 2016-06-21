@@ -230,7 +230,14 @@ public class EnquetesFragment extends Fragment {
                 TextView tv = (TextView)view.findViewById(android.support.design.R.id.snackbar_text);
                 tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 snack.show();
-
+                return true;
+            case R.id.legenda:
+                //shows popup with text "Lijsten ophalen...", text aligned in center of popup
+                Snackbar snackbar = Snackbar.make(mView,"groen = nieuw,    oranje = bezig,    rood = klaar",Snackbar.LENGTH_SHORT);
+                View v = snackbar.getView();
+                TextView textView = (TextView)v.findViewById(android.support.design.R.id.snackbar_text);
+                textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                snackbar.show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
