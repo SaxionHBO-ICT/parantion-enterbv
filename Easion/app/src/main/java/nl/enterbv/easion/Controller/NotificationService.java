@@ -1,4 +1,4 @@
-package nl.enterbv.easion.Model;
+package nl.enterbv.easion.Controller;
 
 import android.app.Service;
 import android.content.Intent;

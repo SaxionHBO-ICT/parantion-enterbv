@@ -1,4 +1,4 @@
-package nl.enterbv.easion.Activities;
+package nl.enterbv.easion.Controller.Activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

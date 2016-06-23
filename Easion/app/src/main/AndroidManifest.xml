@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Activities.MainActivity"
+            android:name=".Controller.Activities.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
             android:theme="@style/FullscreenTheme">
@@ -24,7 +24,7 @@
 
         </activity>
         <activity
-            android:name=".Activities.LoginActivity"
+            android:name=".Controller.Activities.LoginActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_login"
             android:screenOrientation="portrait">
@@ -36,10 +36,10 @@
 
         </activity>
         <activity
-            android:name=".Activities.EnqueteWebViewActivity"
+            android:name=".Controller.Activities.EnqueteWebViewActivity"
             android:label="Enquete"
             android:theme="@style/AppThemeSecondary"
-            android:parentActivityName=".Activities.MainActivity"
+            android:parentActivityName=".Controller.Activities.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
     </application>
 

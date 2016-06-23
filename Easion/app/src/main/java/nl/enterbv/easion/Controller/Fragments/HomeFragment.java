@@ -1,4 +1,4 @@
-package nl.enterbv.easion.Fragments;
+package nl.enterbv.easion.Controller.Fragments;
 
 import android.os.Bundle;
 import android.os.Handler;

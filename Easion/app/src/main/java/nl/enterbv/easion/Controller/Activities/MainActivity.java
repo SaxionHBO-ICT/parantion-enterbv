@@ -1,4 +1,4 @@
-package nl.enterbv.easion.Activities;
+package nl.enterbv.easion.Controller.Activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -39,11 +39,11 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import nl.enterbv.easion.Fragments.ContactFragment;
-import nl.enterbv.easion.Fragments.EnquetesFragment;
-import nl.enterbv.easion.Fragments.HomeFragment;
-import nl.enterbv.easion.Fragments.InfoFragment;
-import nl.enterbv.easion.Fragments.SettingsFragment;
+import nl.enterbv.easion.Controller.Fragments.ContactFragment;
+import nl.enterbv.easion.Controller.Fragments.EnquetesFragment;
+import nl.enterbv.easion.Controller.Fragments.HomeFragment;
+import nl.enterbv.easion.Controller.Fragments.InfoFragment;
+import nl.enterbv.easion.Controller.Fragments.SettingsFragment;
 import nl.enterbv.easion.Model.AppModel;
 import nl.enterbv.easion.Model.Enquete;
 import nl.enterbv.easion.Model.User;
@@ -90,7 +90,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.e("testTag1337", "link = " + AppModel.getInstance().getCurrentUser().getProfilePhotoString());
 
 
-
     }
 
 
@@ -120,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * Logs the user out
      */
     public void logOut() {
+        //currFragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         logOutDialog();
 
     }
@@ -172,9 +172,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        if (id == R.id.nav_logout) {
+            //donothing
+        } else {
+            item.setCheckable(true);
+            item.setChecked(true);
+        }
 
-        item.setCheckable(true);
-        item.setChecked(true);
 
         if (id == R.id.nav_home) {
             fragmentManager.beginTransaction()
@@ -204,7 +208,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             , new SettingsFragment())
                     .commit();
         } else if (id == R.id.nav_logout) {
-
             logOut();
         }
 

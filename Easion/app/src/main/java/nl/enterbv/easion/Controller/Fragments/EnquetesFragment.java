@@ -1,4 +1,4 @@
-package nl.enterbv.easion.Fragments;
+package nl.enterbv.easion.Controller.Fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -40,12 +40,12 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import nl.enterbv.easion.Activities.EnqueteWebViewActivity;
-import nl.enterbv.easion.Activities.LoginActivity;
+import nl.enterbv.easion.Controller.Activities.EnqueteWebViewActivity;
+import nl.enterbv.easion.Controller.Activities.LoginActivity;
 import nl.enterbv.easion.Controller.OnSwipeTouchListener;
 import nl.enterbv.easion.Model.AppModel;
 import nl.enterbv.easion.Model.Enquete;
-import nl.enterbv.easion.Model.TaskListAdapter;
+import nl.enterbv.easion.View.TaskListAdapter;
 import nl.enterbv.easion.Model.User;
 import nl.enterbv.easion.R;
 

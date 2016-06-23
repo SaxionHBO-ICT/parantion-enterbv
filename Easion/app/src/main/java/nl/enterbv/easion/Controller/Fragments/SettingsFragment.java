@@ -1,4 +1,4 @@
-package nl.enterbv.easion.Fragments;
+package nl.enterbv.easion.Controller.Fragments;
 
 import android.content.Context;
 import android.os.AsyncTask;

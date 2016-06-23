@@ -1,4 +1,4 @@
-package nl.enterbv.easion.Model;
+package nl.enterbv.easion.View;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import nl.enterbv.easion.Model.Enquete;
 import nl.enterbv.easion.R;
 
 /**
