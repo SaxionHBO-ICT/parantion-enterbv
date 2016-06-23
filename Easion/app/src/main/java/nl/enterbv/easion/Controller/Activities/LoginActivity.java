@@ -163,13 +163,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         String username = pref.getString(PREF_USERNAME, null);
         String password = pref.getString(PREF_PASSWORD, null);
 
         if (username != null || password != null) {
-            Log.e("testTag1337", "sharedprefs is null");
             mUsernameView.setText(username);
             mPasswordView.setText(password);
             attemptLogin();
@@ -376,7 +374,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
                 return true;
-                //Thread.sleep(2000);
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (ProtocolException e) {

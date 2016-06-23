@@ -119,13 +119,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * Logs the user out
      */
     public void logOut() {
-        //currFragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         logOutDialog();
 
     }
 
     private void logOutDialog() {
-
         new AlertDialog.Builder(MainActivity.this, R.style.StyledDialog)
                 .setTitle("Uitloggen")
                 .setMessage("Weet je zeker dat je wilt uitloggen?")
@@ -134,13 +132,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     public void onClick(DialogInterface dialog, int which) {
                         Log.e("testTag", "user wished to log out.");
 
+                        //clears device login data
                         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                         prefs.edit().clear().commit();
 
 
                         Intent i = new Intent(MainActivity.this, LoginActivity.class);
                         startActivity(i);
+
+                        //clears session data
                         AppModel.logout();
+
                         finish();
 
                     }
@@ -149,7 +151,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Log.e("testTag", "user did not wish to log out.");
-
                     }
                 })
                 .setIcon(R.drawable.alert)
