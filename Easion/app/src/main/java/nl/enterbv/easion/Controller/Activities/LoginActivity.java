@@ -118,26 +118,6 @@ public class LoginActivity extends AppCompatActivity {
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
-        Button devLogin = (Button) findViewById(R.id.devButton);
-        devLogin.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mUsernameView.setText("saxmoeuse01");
-                mPasswordView.setText("Welkom01");
-                attemptLogin();
-            }
-        });
-
-        Button devLoginJoep = (Button) findViewById(R.id.devLogin_joep);
-        devLoginJoep.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mUsernameView.setText("joep.vander.staaij");
-                mPasswordView.setText("T8qapane");
-                attemptLogin();
-            }
-        });
-
 
         ProgressBar spinner = (ProgressBar) findViewById(R.id.login_progress);
         spinner.getIndeterminateDrawable().setColorFilter(Color.parseColor("#7FC8EC"),
